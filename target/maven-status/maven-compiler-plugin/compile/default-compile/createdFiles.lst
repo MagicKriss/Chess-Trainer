@@ -1,0 +1,5 @@
+com/chess/PieceColor.class
+com/chess/pieces/Pawn.class
+com/chess/game/Game.class
+com/chess/game/Square.class
+com/chess/pieces/Piece.class
