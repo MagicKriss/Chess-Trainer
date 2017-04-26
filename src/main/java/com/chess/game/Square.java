@@ -12,29 +12,29 @@ public class Square {
     private final int rank;
     private boolean occupied;
     private Piece pieceOnTile;
-    private static final Map<String,Square> SQUARES = new HashMap<String,Square>();
+    private static final Map<String, Square> SQUARES = new HashMap<String, Square>();
 
-    Square(char file, int rank){
+    Square(char file, int rank) {
         this.file = file;
         this.rank = rank;
         occupied = true;
         pieceOnTile = null;
-        SQUARES.put(this.toString(),this);
+        SQUARES.put(this.toString(), this);
     }
 
-    public int getRank(){
+    public int getRank() {
         return rank;
     }
 
-    public char getFile(){
+    public char getFile() {
         return file;
     }
 
-    public void toggleOccupied(){
-        occupied = occupied ? false : true;
+    public void toggleOccupied() {
+        occupied = !occupied;
     }
 
-    public boolean isOccupied(){
+    public boolean isOccupied() {
         return occupied;
     }
 
@@ -42,16 +42,17 @@ public class Square {
         this.pieceOnTile = pieceOnTile;
     }
 
-    public Piece getPiece(){
+    public Piece getPiece() {
         return pieceOnTile;
     }
 
-    public String squareToString (){
-        return String.valueOf(file+rank);
+    public String squareToString() {
+        return String.valueOf(file + rank);
     }
-    public static Square getSquare(char file,int rank){
-        return SQUARES.get(String.valueOf(file+rank));
-    };
+
+    public static Square getSquare(char file, int rank) {
+        return SQUARES.get(String.valueOf(file + rank));
+    }
 
 
 }
