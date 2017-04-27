@@ -1,6 +1,6 @@
 package com.chess.pieces;
 
-import com.chess.PieceColor;
+import com.chess.Color;
 import com.chess.game.Square;
 
 import java.util.ArrayList;
@@ -8,8 +8,8 @@ import java.util.List;
 
 
 public class Queen extends Piece {
-    Queen(char file, int rank, PieceColor pieceColor) throws Exception {
-        super(file, rank, pieceColor);
+    public Queen(char file, int rank, Color color) throws Exception {
+        super(file, rank, color);
     }
 
     @Override

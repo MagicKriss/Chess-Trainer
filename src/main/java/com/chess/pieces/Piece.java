@@ -1,6 +1,6 @@
 package com.chess.pieces;
 
-import com.chess.PieceColor;
+import com.chess.Color;
 import com.chess.game.Square;
 
 import java.util.List;
@@ -8,15 +8,15 @@ import java.util.List;
 public abstract class Piece {
     private char file;
     private int rank;
-    private final PieceColor pieceColor;
+    private final Color color;
 
-    Piece(char file, int rank, PieceColor pieceColor) throws Exception {
+    Piece(char file, int rank, Color color) throws Exception {
         if (Square.getSquare(file, rank).isOccupied()) {
             throw new Exception("This Square is occupied");
         }
         this.file = file;
         this.rank = rank;
-        this.pieceColor = pieceColor;
+        this.color = color;
         this.getSquare().toggleOccupied();
     }
 
@@ -25,7 +25,7 @@ public abstract class Piece {
         return Square.getSquare(file, rank);
     }
 
-    public char getFile(){
+    public char getFile() {
         return file;
     }
 
@@ -33,8 +33,8 @@ public abstract class Piece {
         return rank;
     }
 
-    public PieceColor getPieceColor() {
-        return pieceColor;
+    public Color getColor() {
+        return color;
     }
 
     public abstract List<Square> legalMoves();

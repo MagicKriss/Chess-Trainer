@@ -1,6 +1,6 @@
 package com.chess.pieces;
 
-import com.chess.PieceColor;
+import com.chess.Color;
 import com.chess.game.Square;
 
 import java.util.ArrayList;
@@ -10,15 +10,15 @@ public class Pawn extends Piece {
 
     private boolean hasMoved;
 
-    Pawn(char file, int rank, PieceColor pieceColor) throws Exception {
-        super(file, rank, pieceColor);
+    public Pawn(char file, int rank, Color color) throws Exception {
+        super(file, rank, color);
         hasMoved = false;
     }
 
     @Override
     public List<Square> legalMoves() {
         List<Square> legalMoves = new ArrayList<Square>();
-        int direction = getPieceColor() == PieceColor.WHITE ? 1 : -1; // White pawns move upward, black pawns move downward
+        int direction = getColor() == Color.WHITE ? 1 : -1; // White pawns move upward, black pawns move downward
         Square checkSquare;
         checkSquare = Square.getSquare(getFile(), getRank() + direction);
         if (!checkSquare.isOccupied()) {
@@ -29,7 +29,7 @@ public class Pawn extends Piece {
         }
         for (int i = -1; i < 2; i += 2) {
             checkSquare = Square.getSquare((char) (this.getFile() + i), this.getRank() + direction);
-            if (checkSquare.isOccupied() && checkSquare.getPiece().getPieceColor() != this.getPieceColor()) {
+            if (checkSquare.isOccupied() && checkSquare.getPiece().getColor() != this.getColor()) {
                 legalMoves.add(checkSquare);
             }
         }

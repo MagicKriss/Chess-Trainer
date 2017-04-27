@@ -1,9 +1,7 @@
 package com.chess.game;
 
-import com.chess.pieces.Piece;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.chess.Color;
+import com.chess.pieces.*;
 
 
 public class Square {
@@ -12,14 +10,15 @@ public class Square {
     private final int rank;
     private boolean occupied;
     private Piece pieceOnTile;
-    private static final Map<String, Square> SQUARES = new HashMap<String, Square>();
+    private final Color color;
 
     Square(char file, int rank) {
         this.file = file;
         this.rank = rank;
         occupied = true;
         pieceOnTile = null;
-        SQUARES.put(this.toString(), this);
+        color = (file - 97 + rank) % 2 == 0 ? Color.WHITE : Color.BLACK;
+        Game.Board.getBOARD().put(this.toString(), this);
     }
 
     public int getRank() {
@@ -46,13 +45,16 @@ public class Square {
         return pieceOnTile;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
     public String squareToString() {
-        return String.valueOf(file + rank);
+        return String.valueOf(file) + rank;
     }
 
     public static Square getSquare(char file, int rank) {
-        return SQUARES.get(String.valueOf(file + rank));
+        return Game.Board.getBOARD().get(String.valueOf(file) + rank);
     }
-
 
 }

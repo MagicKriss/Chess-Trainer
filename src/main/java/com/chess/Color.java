@@ -1,5 +1,5 @@
 package com.chess;
 
-public enum PieceColor {
+public enum Color {
     WHITE, BLACK
 }

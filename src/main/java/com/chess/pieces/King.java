@@ -1,6 +1,6 @@
 package com.chess.pieces;
 
-import com.chess.PieceColor;
+import com.chess.Color;
 import com.chess.game.Square;
 
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class King extends Piece {
     private boolean check;
-    King(char file, int rank, PieceColor pieceColor) throws Exception {
-        super(file, rank, pieceColor);
+    public King(char file, int rank, Color color) throws Exception {
+        super(file, rank, color);
         check = false;
     }
 
@@ -63,7 +63,7 @@ public class King extends Piece {
             if (checkSquare != null) {
                 if (!checkSquare.isOccupied()) {
                     legalMoves.add(checkSquare);
-                } else if (checkSquare.getPiece().getPieceColor() != this.getPieceColor()) {
+                } else if (checkSquare.getPiece().getColor() != this.getColor()) {
                     legalMoves.add(checkSquare);
                 }
             }

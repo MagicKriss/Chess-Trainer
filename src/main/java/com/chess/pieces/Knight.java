@@ -1,14 +1,14 @@
 package com.chess.pieces;
 
-import com.chess.PieceColor;
+import com.chess.Color;
 import com.chess.game.Square;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Knight extends Piece {
-    Knight(char file, int rank, PieceColor pieceColor) throws Exception {
-        super(file, rank, pieceColor);
+    public Knight(char file, int rank, Color color) throws Exception {
+        super(file, rank, color);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Knight extends Piece {
 
             if (!Square.getSquare((char) (this.getFile() + fileDirection), this.getRank() + rankDirection).isOccupied()) {
                 legalMoves.add(Square.getSquare((char) (this.getFile() + fileDirection), this.getRank() + (rankDirection)));
-            } else if (Square.getSquare((char) (this.getFile() + fileDirection), this.getRank() + rankDirection).getPiece().getPieceColor() != this.getPieceColor()) {
+            } else if (Square.getSquare((char) (this.getFile() + fileDirection), this.getRank() + rankDirection).getPiece().getColor() != this.getColor()) {
                 legalMoves.add(Square.getSquare((char) (this.getFile() + fileDirection), this.getRank() + rankDirection));
             }
         }
