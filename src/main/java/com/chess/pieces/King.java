@@ -36,30 +36,41 @@ public class King extends Piece {
                 case 0:
                     rankDirection = -1;
                     fileDirection = -1;
+                    break;
                 case 1:
                     rankDirection = -1;
                     fileDirection = 0;
+                    break;
                 case 2:
                     rankDirection = -1;
                     fileDirection = 1;
+                    break;
                 case 3:
                     rankDirection = 0;
                     fileDirection = -1;
+                    break;
                 case 4:
                     rankDirection = 0;
                     fileDirection = 1;
+                    break;
                 case 5:
                     rankDirection = 1;
                     fileDirection = -1;
+                    break;
                 case 6:
                     rankDirection = 1;
                     fileDirection = 0;
+                    break;
                 case 7:
                     rankDirection = 1;
                     fileDirection = 1;
+                    break;
             }
             for (int j = 0; j < 8; j++) {
-                checkSquare = Square.getSquare((char) (this.getFile() + (j + 1) * fileDirection), this.getRank() + (j + 1) * rankDirection);
+                checkSquare = Square.getSquare((char) (this.getSquare().getFile() + (j + 1) * fileDirection), this.getSquare().getRank() + (j + 1) * rankDirection);
+                if (checkSquare == null) {
+                    break;
+                }
                 if (checkSquare.equals(squareBeforeMove)) {
                     continue;
                 }
@@ -68,7 +79,7 @@ public class King extends Piece {
                         break;
                     }
                     if (checkSquare.isOccupied()) {
-                        if (checkSquare.getColor() != this.getColor()) {
+                        if (checkSquare.getPiece().getColor() != this.getColor()) {
                             moves.add(checkSquare);
                         } else break;
                     }
@@ -76,7 +87,7 @@ public class King extends Piece {
             }
         }
         for (Square pieceSquare : moves) {
-            if (pieceSquare.getPiece().getLegalMoves().contains(this.getSquare())) {
+            if (pieceSquare.getPiece().getMoves().contains(this.getSquare())) {
                 return true;
             }
         }
@@ -84,7 +95,7 @@ public class King extends Piece {
     }
 
     @Override
-    public List<Square> getLegalMoves() {
+    public List<Square> getMoves() {
         List<Square> legalMoves = new ArrayList<Square>();
         Square checkSquare;
         // directions in witch to check for legal moves
@@ -95,30 +106,38 @@ public class King extends Piece {
                 case 0:
                     rankDirection = -1;
                     fileDirection = -1;
+                    break;
                 case 1:
                     rankDirection = -1;
                     fileDirection = 0;
+                    break;
                 case 2:
                     rankDirection = -1;
                     fileDirection = 1;
+                    break;
                 case 3:
                     rankDirection = 0;
                     fileDirection = -1;
+                    break;
                 case 4:
                     rankDirection = 0;
                     fileDirection = 1;
+                    break;
                 case 5:
                     rankDirection = 1;
                     fileDirection = -1;
+                    break;
                 case 6:
                     rankDirection = 1;
                     fileDirection = 0;
+                    break;
                 case 7:
                     rankDirection = 1;
                     fileDirection = 1;
+                    break;
             }
 
-            checkSquare = Square.getSquare((char) (this.getFile() + fileDirection), this.getRank() + rankDirection);
+            checkSquare = Square.getSquare((char) (this.getSquare().getFile() + fileDirection), this.getSquare().getRank() + rankDirection);
             if (checkSquare != null) {
                 if (!checkForCheck(this.getSquare(), checkSquare)) { // check if after this move king will be under check
                     if (!checkSquare.isOccupied()) {

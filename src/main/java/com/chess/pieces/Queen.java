@@ -14,7 +14,7 @@ public class Queen extends Piece {
     }
 
     @Override
-    public List<Square> getLegalMoves() {
+    public List<Square> getMoves() {
         List<Square> legalMoves = new ArrayList<Square>();
         // directions in witch to check for legal moves
         int rankDirection = 0;
@@ -24,34 +24,42 @@ public class Queen extends Piece {
                 case 0:
                     rankDirection = -1;
                     fileDirection = -1;
+                    break;
                 case 1:
                     rankDirection = -1;
                     fileDirection = 0;
+                    break;
                 case 2:
                     rankDirection = -1;
                     fileDirection = 1;
+                    break;
                 case 3:
                     rankDirection = 0;
                     fileDirection = -1;
+                    break;
                 case 4:
                     rankDirection = 0;
                     fileDirection = 1;
+                    break;
                 case 5:
                     rankDirection = 1;
                     fileDirection = -1;
+                    break;
                 case 6:
                     rankDirection = 1;
                     fileDirection = 0;
+                    break;
                 case 7:
                     rankDirection = 1;
                     fileDirection = 1;
+                    break;
             }
-            for(Square move :MoveUtil.getLegalMoves(legalMoves,this,fileDirection,rankDirection) ){
-                if(!((King)Game.getKingSquare(this.getColor()).getPiece()).checkForCheck(this.getSquare(),move)){ // check if after this move same color king will be under check
+            for (Square move : MoveUtil.getLegalMoves(legalMoves, this, fileDirection, rankDirection)) {
+                if (!((King) Game.getKingSquare(this.getColor()).getPiece()).checkForCheck(this.getSquare(), move)) { // check if after this move same color king will be under check
                     legalMoves.add(move); // if not, add this move to legal moves
                 }
             }
-           // legalMoves.addAll(MoveUtil.getLegalMoves(legalMoves,this,fileDirection,rankDirection));
+            // legalMoves.addAll(MoveUtil.getMoves(legalMoves,this,fileDirection,rankDirection));
 
         }
 

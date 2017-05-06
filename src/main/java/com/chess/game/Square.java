@@ -15,7 +15,7 @@ public class Square {
     Square(char file, int rank) {
         this.file = file;
         this.rank = rank;
-        occupied = true;
+        occupied = false;
         pieceOnTile = null;
         color = (file - 97 + rank) % 2 == 0 ? Color.WHITE : Color.BLACK;
         Game.Board.getBOARD().put(this.toString(), this);
@@ -39,6 +39,9 @@ public class Square {
 
     public void setPieceOnTile(Piece pieceOnTile) {
         this.pieceOnTile = pieceOnTile;
+        if (!this.isOccupied()) {
+            this.toggleOccupied();
+        }
     }
 
     public Piece getPiece() {

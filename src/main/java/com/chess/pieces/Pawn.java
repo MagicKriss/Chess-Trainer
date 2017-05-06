@@ -17,34 +17,30 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Square> getLegalMoves() {
-        List<Square> legalMoves = new ArrayList<Square>();
+    public List<Square> getMoves() {
+        List<Square> moves = new ArrayList<Square>();
         int direction = getColor() == Color.WHITE ? 1 : -1; // White pawns move upward, black pawns move downward
         Square checkSquare;
-        checkSquare = Square.getSquare(getFile(), getRank() + direction);
-        if (!((King) Game.getKingSquare(this.getColor()).getPiece()).checkForCheck(this.getSquare(), checkSquare)) { // check if after this move same color king will be under check
-
-            if (!checkSquare.isOccupied()) {
-                legalMoves.add(checkSquare);
-                if (!Square.getSquare(this.getFile(), this.getRank() + direction * 2).isOccupied() && !hasMoved) {
-                    legalMoves.add(Square.getSquare(this.getFile(), this.getRank() + direction * 2));
-                }
+        checkSquare = Square.getSquare(this.getSquare().getFile(), this.getSquare().getRank() + direction);
+        if (!checkSquare.isOccupied()) {
+            moves.add(checkSquare);
+            if (!Square.getSquare(this.getSquare().getFile(), this.getSquare().getRank() + direction * 2).isOccupied() && !hasMoved) {
+                moves.add(Square.getSquare(this.getSquare().getFile(), this.getSquare().getRank() + direction * 2));
             }
         }
         for (int i = -1; i < 2; i += 2) {
-            if (!((King) Game.getKingSquare(this.getColor()).getPiece()).checkForCheck(this.getSquare(), checkSquare)) { // check if after this move same color king will be under check
-                checkSquare = Square.getSquare((char) (this.getFile() + i), this.getRank() + direction);
+            checkSquare = Square.getSquare((char) (this.getSquare().getFile() + i), this.getSquare().getRank() + direction);
+            if (checkSquare != null) {
                 if (checkSquare.isOccupied() && checkSquare.getPiece().getColor() != this.getColor()) {
-                    legalMoves.add(checkSquare);
+                    moves.add(checkSquare);
                 }
             }
         }
-        //TODO
-        // en passant
-
-        return legalMoves;
+        return moves;
     }
-    public void pawnMove(){
+    //            if (!((King) Game.getKingSquare(this.getColor()).getPiece()).checkForCheck(this.getSquare(), checkSquare)) { // check if after this move same color king will be under check
+
+    public void pawnMove() {
         hasMoved = true;
     }
 

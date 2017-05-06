@@ -7,12 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Game {
+    private static Game game;
     private static final Player whitePlayer = new Player(Color.WHITE);
     private static final Player blackPlayer = new Player(Color.BLACK);
-    private static Color playerToMove;
+    private static Player playerToMove;
     private static Square whiteKingSquare;
     private static Square blackKingSquare;
-    Game() throws Exception {
+
+    private Game() throws Exception {
         Board.BoardBuilder.defaultBoard();
        /*
        for (int i = 0; i < 8; i++) {
@@ -22,33 +24,47 @@ public class Game {
             blackPlayer.addControlledSquare(String.valueOf((char) (97 + i)) + 8);
         }
         */
-        playerToMove = Color.WHITE;
+        playerToMove = whitePlayer;
         whiteKingSquare = Board.getBOARD().get("e1");
         blackKingSquare = Board.getBOARD().get("e8");
     }
 
-    public static Square getKingSquare(Color color){
+    public static Game getGame() {
+        return game;
+    }
+
+    static {
+        try {
+            game = new Game();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Square getKingSquare(Color color) {
         return color == Color.WHITE ? whiteKingSquare : blackKingSquare;
     }
-    public static Color getPlayerToMove(){
+
+    public static Player getPlayerToMove() {
         return playerToMove;
     }
 
-    public static void togglePlayerToMove(){
-        playerToMove = playerToMove == Color.WHITE ? Color.BLACK : Color.WHITE;
+    public static void togglePlayerToMove() {
+        playerToMove = playerToMove.getColor() == Color.WHITE ? blackPlayer : whitePlayer;
     }
 
     public static boolean move(Player player, Square fromSquare, Square toSquare) {
         Piece pieceToMove;
-        if (player.getColor() == playerToMove && fromSquare.isOccupied()) {
+        if (player.getColor() == playerToMove.getColor() && fromSquare.isOccupied()) {
             pieceToMove = fromSquare.getPiece();
-            if (pieceToMove.getColor() == player.getColor() && pieceToMove.getLegalMoves().contains(toSquare)) {
+            if (pieceToMove.getColor() == player.getColor() && pieceToMove.getMoves().contains(toSquare)) {
                 toSquare.setPieceOnTile(pieceToMove);
                 fromSquare.setPieceOnTile(null);
                 fromSquare.toggleOccupied();
-                if(pieceToMove.getClass() == Pawn.class){
-                    ((Pawn)pieceToMove).pawnMove();
+                if (pieceToMove.getClass() == Pawn.class) {
+                    ((Pawn) pieceToMove).pawnMove();
                 }
+                pieceToMove.setSquare(toSquare);
                 return true;
             }
         }

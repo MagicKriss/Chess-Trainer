@@ -14,7 +14,7 @@ public final class MoveUtil {
     public static List<Square> getLegalMoves(List<Square> legalMoves, Piece piece, int fileDirection, int rankDirection) {
         Square checkSquare;
         for (int i = 0; i < 8; i++) {
-            checkSquare = Square.getSquare((char) (piece.getFile() + (i + 1) * fileDirection), piece.getRank() + (i + 1) * rankDirection);
+            checkSquare = Square.getSquare((char) (piece.getSquare().getFile() + (i + 1) * fileDirection), piece.getSquare().getRank() + (i + 1) * rankDirection);
             if (checkSquare != null) {
                 if (!((King) Game.getKingSquare(piece.getColor()).getPiece()).checkForCheck(piece.getSquare(), checkSquare)) { // check if after this move same color king will be under check
                     if (!checkSquare.isOccupied()) {
