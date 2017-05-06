@@ -1,6 +1,7 @@
 package com.chess.pieces;
 
 import com.chess.Color;
+import com.chess.game.Game;
 import com.chess.game.Square;
 
 import java.util.ArrayList;
@@ -12,8 +13,9 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<Square> legalMoves() {
+    public List<Square> getLegalMoves() {
         List<Square> legalMoves = new ArrayList<Square>();
+        Square checkSquare;
         // directions in witch to check for legal moves
         int rankDirection = 0;
         int fileDirection = 0;
@@ -49,11 +51,13 @@ public class Knight extends Piece {
             } else if (this.getRank() + rankDirection > 8 || this.getRank() + rankDirection < 1) {
                 continue;
             }
-
-            if (!Square.getSquare((char) (this.getFile() + fileDirection), this.getRank() + rankDirection).isOccupied()) {
-                legalMoves.add(Square.getSquare((char) (this.getFile() + fileDirection), this.getRank() + (rankDirection)));
-            } else if (Square.getSquare((char) (this.getFile() + fileDirection), this.getRank() + rankDirection).getPiece().getColor() != this.getColor()) {
-                legalMoves.add(Square.getSquare((char) (this.getFile() + fileDirection), this.getRank() + rankDirection));
+            checkSquare = Square.getSquare((char) (this.getFile() + fileDirection), this.getRank() + (rankDirection));
+            if (!((King) Game.getKingSquare(this.getColor()).getPiece()).checkForCheck(this.getSquare(), checkSquare)) { // check if after this move same color king will be under check
+                if (!checkSquare.isOccupied()) {
+                    legalMoves.add(checkSquare);
+                } else if (checkSquare.getPiece().getColor() != this.getColor()) {
+                    legalMoves.add(checkSquare);
+                }
             }
         }
         return null;

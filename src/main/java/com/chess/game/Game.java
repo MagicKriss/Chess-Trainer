@@ -10,7 +10,8 @@ public class Game {
     private static final Player whitePlayer = new Player(Color.WHITE);
     private static final Player blackPlayer = new Player(Color.BLACK);
     private static Color playerToMove;
-
+    private static Square whiteKingSquare;
+    private static Square blackKingSquare;
     Game() throws Exception {
         Board.BoardBuilder.defaultBoard();
        /*
@@ -22,16 +23,32 @@ public class Game {
         }
         */
         playerToMove = Color.WHITE;
+        whiteKingSquare = Board.getBOARD().get("e1");
+        blackKingSquare = Board.getBOARD().get("e8");
     }
 
-    public boolean move(Player player, Square fromSquare, Square toSquare) {
+    public static Square getKingSquare(Color color){
+        return color == Color.WHITE ? whiteKingSquare : blackKingSquare;
+    }
+    public static Color getPlayerToMove(){
+        return playerToMove;
+    }
+
+    public static void togglePlayerToMove(){
+        playerToMove = playerToMove == Color.WHITE ? Color.BLACK : Color.WHITE;
+    }
+
+    public static boolean move(Player player, Square fromSquare, Square toSquare) {
         Piece pieceToMove;
         if (player.getColor() == playerToMove && fromSquare.isOccupied()) {
             pieceToMove = fromSquare.getPiece();
-            if (pieceToMove.getColor() == player.getColor() && pieceToMove.legalMoves().contains(toSquare)) {
+            if (pieceToMove.getColor() == player.getColor() && pieceToMove.getLegalMoves().contains(toSquare)) {
                 toSquare.setPieceOnTile(pieceToMove);
                 fromSquare.setPieceOnTile(null);
                 fromSquare.toggleOccupied();
+                if(pieceToMove.getClass() == Pawn.class){
+                    ((Pawn)pieceToMove).pawnMove();
+                }
                 return true;
             }
         }

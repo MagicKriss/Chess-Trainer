@@ -1,6 +1,7 @@
 package com.chess.pieces;
 
 import com.chess.Color;
+import com.chess.game.Game;
 import com.chess.game.Square;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class Queen extends Piece {
     }
 
     @Override
-    public List<Square> legalMoves() {
+    public List<Square> getLegalMoves() {
         List<Square> legalMoves = new ArrayList<Square>();
         // directions in witch to check for legal moves
         int rankDirection = 0;
@@ -45,7 +46,12 @@ public class Queen extends Piece {
                     rankDirection = 1;
                     fileDirection = 1;
             }
-            legalMoves = LegalMoveUtil.getLegalMoves(legalMoves,this,fileDirection,rankDirection);
+            for(Square move :MoveUtil.getLegalMoves(legalMoves,this,fileDirection,rankDirection) ){
+                if(!((King)Game.getKingSquare(this.getColor()).getPiece()).checkForCheck(this.getSquare(),move)){ // check if after this move same color king will be under check
+                    legalMoves.add(move); // if not, add this move to legal moves
+                }
+            }
+           // legalMoves.addAll(MoveUtil.getLegalMoves(legalMoves,this,fileDirection,rankDirection));
 
         }
 

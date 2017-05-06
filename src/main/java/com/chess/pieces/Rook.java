@@ -14,7 +14,7 @@ public class Rook extends Piece {
 
 
     @Override
-    public List<Square> legalMoves() {
+    public List<Square> getLegalMoves() {
         List<Square> legalMoves = new ArrayList<Square>();
         // directions in witch to check for legal moves
         int rankDirection = 0;
@@ -34,7 +34,7 @@ public class Rook extends Piece {
                     rankDirection = -1;
                     fileDirection = -0;
             }
-            legalMoves = LegalMoveUtil.getLegalMoves(legalMoves,this,fileDirection,rankDirection);
+            legalMoves.addAll(MoveUtil.getLegalMoves(legalMoves,this,fileDirection,rankDirection));
         }
         return legalMoves;
     }

@@ -37,7 +37,7 @@ public abstract class Piece {
         return color;
     }
 
-    public abstract List<Square> legalMoves();
+    public abstract List<Square> getLegalMoves();
 
 
 }
