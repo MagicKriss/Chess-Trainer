@@ -32,7 +32,11 @@ public class Game {
     public static Game getGame() {
         return game;
     }
+    public static Game getNewGame() throws Exception {
+        return new Game();
+    }
 
+    /*
     static {
         try {
             game = new Game();
@@ -40,7 +44,7 @@ public class Game {
             e.printStackTrace();
         }
     }
-
+*/
     public static Square getKingSquare(Color color) {
         return color == Color.WHITE ? whiteKingSquare : blackKingSquare;
     }

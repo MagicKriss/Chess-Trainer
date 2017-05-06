@@ -1,5 +1,6 @@
 package com.chess.pieces;
 
+import com.chess.Color;
 import com.chess.game.Game;
 import com.chess.game.Player;
 import com.chess.game.Square;
@@ -19,7 +20,7 @@ class PawnTest {
     @BeforeEach
     public void setUp() throws Exception {
         legalMoveList = new ArrayList<Square>();
-        game = Game.getGame();
+        game = Game.getNewGame();
 
     }
 
@@ -49,6 +50,27 @@ class PawnTest {
         legalMoveList.remove(a3);
         assertEquals(legalMoveList, whitePawn.getLegalMoves());
 
+    }
+
+    @Test
+    void testGetCaptureMove() throws Exception {
+        Piece pawn = Square.getSquare('c', 2).getPiece();
+
+        legalMoveList.add(Square.getSquare('c', 3));
+        legalMoveList.add(Square.getSquare('c', 4));
+        assertEquals(legalMoveList, pawn.getLegalMoves());
+        Game.Board.getBOARD().get("b3").setPieceOnTile(new Pawn('b', 3, Color.BLACK));
+        legalMoveList.add(Square.getSquare('b', 3));
+        assertEquals(legalMoveList, pawn.getLegalMoves());
+        Game.Board.getBOARD().get("d3").setPieceOnTile(new Pawn('d', 3, Color.BLACK));
+        legalMoveList.add(Square.getSquare('d', 3));
+        assertEquals(legalMoveList, pawn.getLegalMoves());
+        Game.Board.getBOARD().get("c4").setPieceOnTile(new Pawn('c', 4, Color.BLACK));
+        legalMoveList.remove(Square.getSquare('c', 4));
+        assertEquals(legalMoveList, pawn.getLegalMoves());
+        Game.Board.getBOARD().get("c3").setPieceOnTile(new Pawn('c', 3, Color.BLACK));
+        legalMoveList.remove(Square.getSquare('c', 3));
+        assertEquals(legalMoveList, pawn.getLegalMoves());
     }
 
 
