@@ -1,11 +1,13 @@
-package com.chess.game;
+package com.chessEngine.game;
 
-import com.chess.Color;
-import com.chess.pieces.*;
+import com.chessEngine.pieces.*;
+
+import java.awt.*;
 
 
 public class Square {
-
+    public static final Color DARK = new Color(102, 85, 66);
+    public static final Color LIGHT = new Color(237, 224, 208);
     private final char file;
     private final int rank;
     private boolean occupied;
@@ -17,7 +19,7 @@ public class Square {
         this.rank = rank;
         occupied = false;
         pieceOnTile = null;
-        color = (file - 97 + rank) % 2 == 0 ? Color.WHITE : Color.BLACK;
+        color = (file - 97 + rank) % 2 == 0 ? LIGHT : DARK;
         Game.Board.getBOARD().put(this.toString(), this);
     }
 

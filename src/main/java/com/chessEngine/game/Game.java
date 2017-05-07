@@ -1,8 +1,8 @@
-package com.chess.game;
+package com.chessEngine.game;
 
-import com.chess.Color;
-import com.chess.pieces.*;
+import com.chessEngine.pieces.*;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +11,8 @@ public class Game {
     private static final Player whitePlayer = new Player(Color.WHITE);
     private static final Player blackPlayer = new Player(Color.BLACK);
     private static Player playerToMove;
-    private static Square whiteKingSquare;
-    private static Square blackKingSquare;
+    private static Piece whiteKing;
+    private static Piece blackKing;
 
     private Game() throws Exception {
         Board.BoardBuilder.defaultBoard();
@@ -25,14 +25,14 @@ public class Game {
         }
         */
         playerToMove = whitePlayer;
-        whiteKingSquare = Board.getBOARD().get("e1");
-        blackKingSquare = Board.getBOARD().get("e8");
+        whiteKing = Board.getBOARD().get("e1").getPiece();
+        blackKing = Board.getBOARD().get("e8").getPiece();
     }
 
     public static Game getGame() {
         return game;
     }
-    public static Game getNewGame() throws Exception {
+    public static Game newGame() throws Exception {
         return new Game();
     }
 
@@ -45,8 +45,8 @@ public class Game {
         }
     }
 */
-    public static Square getKingSquare(Color color) {
-        return color == Color.WHITE ? whiteKingSquare : blackKingSquare;
+    public static Piece getKing(Color color) {
+        return color == Color.WHITE ? whiteKing : blackKing;
     }
 
     public static Player getPlayerToMove() {
@@ -59,14 +59,16 @@ public class Game {
 
     public static boolean move(Player player, Square fromSquare, Square toSquare) {
         Piece pieceToMove;
+        java.util.List<Square> foo;
         if (player.getColor() == playerToMove.getColor() && fromSquare.isOccupied()) {
             pieceToMove = fromSquare.getPiece();
+           foo = pieceToMove.getMoves();
             if (pieceToMove.getColor() == player.getColor() && pieceToMove.getMoves().contains(toSquare)) {
                 toSquare.setPieceOnTile(pieceToMove);
                 fromSquare.setPieceOnTile(null);
                 fromSquare.toggleOccupied();
-                if (pieceToMove.getClass() == Pawn.class) {
-                    ((Pawn) pieceToMove).pawnMove();
+                if (!pieceToMove.getHasMoved()) {
+                    pieceToMove.setHasMoved();
                 }
                 pieceToMove.setSquare(toSquare);
                 return true;

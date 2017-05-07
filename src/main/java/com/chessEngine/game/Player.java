@@ -1,9 +1,7 @@
-package com.chess.game;
+package com.chessEngine.game;
 
-import com.chess.Color;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.*;
 
 public class Player {
     private final Color color;

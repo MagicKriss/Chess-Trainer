@@ -1,8 +1,8 @@
-package com.chess.pieces;
+package com.chessEngine.pieces;
 
-import com.chess.Color;
-import com.chess.game.Square;
+import com.chessEngine.game.Square;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +86,7 @@ public class King extends Piece {
                 }
             }
         }
+        //TODO castling
         for (Square pieceSquare : moves) {
             if (pieceSquare.getPiece().getMoves().contains(this.getSquare())) {
                 return true;
@@ -96,7 +97,7 @@ public class King extends Piece {
 
     @Override
     public List<Square> getMoves() {
-        List<Square> legalMoves = new ArrayList<Square>();
+        List<Square> moves = new ArrayList<Square>();
         Square checkSquare;
         // directions in witch to check for legal moves
         int rankDirection = 0;
@@ -139,16 +140,20 @@ public class King extends Piece {
 
             checkSquare = Square.getSquare((char) (this.getSquare().getFile() + fileDirection), this.getSquare().getRank() + rankDirection);
             if (checkSquare != null) {
-                if (!checkForCheck(this.getSquare(), checkSquare)) { // check if after this move king will be under check
+                if (!checkForCheck(this.getSquare(), checkSquare)) { // check if after this setHasMoved king will be under check
                     if (!checkSquare.isOccupied()) {
-                        legalMoves.add(checkSquare);
+                        moves.add(checkSquare);
                     } else if (checkSquare.getPiece().getColor() != this.getColor()) {
-                        legalMoves.add(checkSquare);
+                        moves.add(checkSquare);
                     }
                 }
             }
         }
 
-        return legalMoves;
+        return moves;
+    }
+
+    public String getPieceName() {
+        return "King";
     }
 }

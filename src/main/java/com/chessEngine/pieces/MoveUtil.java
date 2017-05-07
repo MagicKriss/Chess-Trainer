@@ -1,7 +1,7 @@
-package com.chess.pieces;
+package com.chessEngine.pieces;
 
-import com.chess.game.Game;
-import com.chess.game.Square;
+import com.chessEngine.game.Game;
+import com.chessEngine.game.Square;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public final class MoveUtil {
         for (int i = 0; i < 8; i++) {
             checkSquare = Square.getSquare((char) (piece.getSquare().getFile() + (i + 1) * fileDirection), piece.getSquare().getRank() + (i + 1) * rankDirection);
             if (checkSquare != null) {
-                if (!((King) Game.getKingSquare(piece.getColor()).getPiece()).checkForCheck(piece.getSquare(), checkSquare)) { // check if after this move same color king will be under check
+                if (!((King) Game.getKing(piece.getColor())).checkForCheck(piece.getSquare(), checkSquare)) { // check if after this setHasMoved same color king will be under check
                     if (!checkSquare.isOccupied()) {
                         legalMoves.add(checkSquare);
                     } else if (checkSquare.getPiece().getColor() != piece.getColor()) {

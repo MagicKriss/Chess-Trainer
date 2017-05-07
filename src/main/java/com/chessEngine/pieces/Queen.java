@@ -1,9 +1,9 @@
-package com.chess.pieces;
+package com.chessEngine.pieces;
 
-import com.chess.Color;
-import com.chess.game.Game;
-import com.chess.game.Square;
+import com.chessEngine.game.Game;
+import com.chessEngine.game.Square;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +55,8 @@ public class Queen extends Piece {
                     break;
             }
             for (Square move : MoveUtil.getLegalMoves(legalMoves, this, fileDirection, rankDirection)) {
-                if (!((King) Game.getKingSquare(this.getColor()).getPiece()).checkForCheck(this.getSquare(), move)) { // check if after this move same color king will be under check
-                    legalMoves.add(move); // if not, add this move to legal moves
+                if (!((King) Game.getKing(this.getColor())).checkForCheck(this.getSquare(), move)) { // check if after this setHasMoved same color king will be under check
+                    legalMoves.add(move); // if not, add this setHasMoved to legal moves
                 }
             }
             // legalMoves.addAll(MoveUtil.getMoves(legalMoves,this,fileDirection,rankDirection));
@@ -64,5 +64,9 @@ public class Queen extends Piece {
         }
 
         return legalMoves;
+    }
+
+    public String getPieceName() {
+        return "Queen";
     }
 }

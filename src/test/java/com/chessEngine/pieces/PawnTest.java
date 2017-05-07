@@ -1,12 +1,11 @@
-package com.chess.pieces;
+package com.chessEngine.pieces;
 
-import com.chess.Color;
-import com.chess.game.Game;
-import com.chess.game.Player;
-import com.chess.game.Square;
+import com.chessEngine.game.Game;
+import com.chessEngine.game.Square;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ class PawnTest {
     @BeforeEach
     public void setUp() throws Exception {
         legalMoveList = new ArrayList<Square>();
-        game = Game.getNewGame();
+        game = Game.newGame();
 
     }
 
