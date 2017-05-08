@@ -58,19 +58,22 @@ public class Game {
     }
 
     public static boolean move(Player player, Square fromSquare, Square toSquare) {
+        // TODO
+        // need to handle moves when king is under check
         Piece pieceToMove;
         java.util.List<Square> foo;
         if (player.getColor() == playerToMove.getColor() && fromSquare.isOccupied()) {
+            Square fooSq = Square.getSquare('e',7);
             pieceToMove = fromSquare.getPiece();
-           foo = pieceToMove.getMoves();
-            if (pieceToMove.getColor() == player.getColor() && pieceToMove.getMoves().contains(toSquare)) {
+            if (pieceToMove.getColor() == player.getColor() && pieceToMove.getLegalMoves().contains(toSquare)) {
                 toSquare.setPieceOnTile(pieceToMove);
-                fromSquare.setPieceOnTile(null);
+                fromSquare.removePiece();
                 fromSquare.toggleOccupied();
                 if (!pieceToMove.getHasMoved()) {
                     pieceToMove.setHasMoved();
                 }
                 pieceToMove.setSquare(toSquare);
+                togglePlayerToMove();
                 return true;
             }
         }

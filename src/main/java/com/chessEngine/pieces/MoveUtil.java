@@ -8,24 +8,22 @@ import java.util.List;
 
 public final class MoveUtil {
     /*/
-    / /   This method is used to help calculate legal moves for Bishop, Rook and Queen
+    / /   This method is used to help calculate possible moves for Bishop, Rook and Queen
     /*/
 
-    public static List<Square> getLegalMoves(List<Square> legalMoves, Piece piece, int fileDirection, int rankDirection) {
+    public static List<Square> getPossibleMoves(List<Square> moves, Piece piece, int fileDirection, int rankDirection) {
         Square checkSquare;
         for (int i = 0; i < 8; i++) {
             checkSquare = Square.getSquare((char) (piece.getSquare().getFile() + (i + 1) * fileDirection), piece.getSquare().getRank() + (i + 1) * rankDirection);
             if (checkSquare != null) {
-                if (!((King) Game.getKing(piece.getColor())).checkForCheck(piece.getSquare(), checkSquare)) { // check if after this setHasMoved same color king will be under check
                     if (!checkSquare.isOccupied()) {
-                        legalMoves.add(checkSquare);
+                        moves.add(checkSquare);
                     } else if (checkSquare.getPiece().getColor() != piece.getColor()) {
-                        legalMoves.add(checkSquare);
+                        moves.add(checkSquare);
                         break;
                     } else break;
-                }
             }
         }
-        return legalMoves;
+        return moves;
     }
 }

@@ -25,78 +25,114 @@ public class King extends Piece {
         return check;
     }
 
-
-    public boolean checkForCheck(Square squareBeforeMove, Square squareAfterMove) {
-        List<Square> moves = new ArrayList<Square>();
-        Square checkSquare;
-        int rankDirection = 0;
-        int fileDirection = 0;
-        for (int i = 0; i < 8; i++) {
-            switch (i) {
-                case 0:
-                    rankDirection = -1;
-                    fileDirection = -1;
-                    break;
-                case 1:
-                    rankDirection = -1;
-                    fileDirection = 0;
-                    break;
-                case 2:
-                    rankDirection = -1;
-                    fileDirection = 1;
-                    break;
-                case 3:
-                    rankDirection = 0;
-                    fileDirection = -1;
-                    break;
-                case 4:
-                    rankDirection = 0;
-                    fileDirection = 1;
-                    break;
-                case 5:
-                    rankDirection = 1;
-                    fileDirection = -1;
-                    break;
-                case 6:
-                    rankDirection = 1;
-                    fileDirection = 0;
-                    break;
-                case 7:
-                    rankDirection = 1;
-                    fileDirection = 1;
-                    break;
-            }
-            for (int j = 0; j < 8; j++) {
-                checkSquare = Square.getSquare((char) (this.getSquare().getFile() + (j + 1) * fileDirection), this.getSquare().getRank() + (j + 1) * rankDirection);
-                if (checkSquare == null) {
-                    break;
-                }
-                if (checkSquare.equals(squareBeforeMove)) {
-                    continue;
-                }
-                if (checkSquare != null) {
-                    if (checkSquare.equals(squareAfterMove)) {
-                        break;
-                    }
-                    if (checkSquare.isOccupied()) {
-                        if (checkSquare.getPiece().getColor() != this.getColor()) {
-                            moves.add(checkSquare);
-                        } else break;
-                    }
-                }
-            }
+    private boolean checkPieceForThreat(Square square) {
+        boolean foo = square.isOccupied();
+        if(foo) {
+            Piece fo = square.getPiece();
+            Color tf = fo.getColor();
+            Color t = this.getColor();
         }
-        //TODO castling
-        for (Square pieceSquare : moves) {
-            if (pieceSquare.getPiece().getMoves().contains(this.getSquare())) {
+        if (square.isOccupied() && square.getPiece().getColor() != this.getColor()) {
+            if (square.getPiece().getMoves() != null && square.getPiece().getMoves().contains(this.getSquare())) {
                 return true;
             }
         }
         return false;
     }
 
+    public boolean checkForCheck(Square squareBeforeMove, Square squareAfterMove) {
+        int kingRank = this.getSquare().getRank();
+        int kingFile = this.getSquare().getFile();
+        boolean isCheck = false;
+        Piece capturedPiece = null;
+        if(squareAfterMove.isOccupied()){
+            capturedPiece = squareAfterMove.getPiece();
+        }else {
+            squareAfterMove.toggleOccupied();
+        }
+        squareAfterMove.setPieceOnTile(squareBeforeMove.getPiece());
+        squareBeforeMove.toggleOccupied();
+        if (kingFile == squareBeforeMove.getFile()) {
+            if (squareAfterMove.getFile() == kingFile) {
+            } else if (kingRank - squareBeforeMove.getRank() < 0) {
+                for (int i = kingRank + 1; i < 9; i++) {
+                    if (checkPieceForThreat(Square.getSquare((char) kingFile, i))) {
+                        isCheck = true;
+                    }
+                }
+            } else {
+                for (int i = kingRank - 1; i > 0; i--) {
+                    if (checkPieceForThreat(Square.getSquare((char) kingFile, i))) {
+                        isCheck = true;
+                    }
+                }
+            }
+
+        } else if (kingRank == squareBeforeMove.getRank()) {
+            if (squareAfterMove.getRank() == kingRank) {
+            } else if (kingFile - squareBeforeMove.getFile() < 0) {
+                for (int i = kingFile + 1; i < 105; i++) {
+                    if (checkPieceForThreat(Square.getSquare((char) i, kingRank))) {
+                        isCheck = true;
+                    }
+                }
+            } else {
+                for (int i = kingFile - 1; i > 96; i--) {
+                    if (checkPieceForThreat(Square.getSquare((char) i , kingRank))) {
+                        isCheck = true;
+                    }
+                }
+            }
+
+        } else if (kingFile + kingRank == squareBeforeMove.getFile() + squareBeforeMove.getRank()) {
+            if (squareAfterMove.getRank() + squareAfterMove.getFile() == kingRank + kingFile) {
+            } else if (kingRank - squareBeforeMove.getRank() < 0) {
+                // moving from  left - down to  right - up
+                for (int i = 1; i < 9 - kingRank; i++) {
+                    if (checkPieceForThreat(Square.getSquare((char) (kingFile + i), kingRank + i))) {
+                        isCheck = true;
+                    }
+                }
+            } else {
+                // moving from right - up to  left - down
+                for (int i = kingRank - 1; i > kingRank - 1; i--) {
+                    if (checkPieceForThreat(Square.getSquare((char) (kingFile - i), kingRank - i))) {
+                        isCheck = true;
+                    }
+                }
+            }
+        } else if (kingFile - kingRank == squareBeforeMove.getFile() - squareBeforeMove.getRank()) {
+            if (squareAfterMove.getRank() - squareAfterMove.getFile() == kingRank - kingFile) {
+            } else if (kingRank - squareBeforeMove.getRank() < 0) {
+                // moving from right - down to  left - up
+                for (int i = 1; i < 9 - kingRank; i++) {
+                    if (checkPieceForThreat(Square.getSquare((char) (kingFile - i), kingRank + i))) {
+                        isCheck = true;
+                    }
+                }
+            } else {
+                // moving from left - up to right - down
+                for (int i = kingRank - 1; i > kingRank - 1; i--) {
+                    if (checkPieceForThreat(Square.getSquare((char) (kingFile + i), kingRank - i))) {
+                        isCheck = true;
+                    }
+                }
+            }
+        }
+        if(capturedPiece != null){
+            squareAfterMove.setPieceOnTile(capturedPiece);
+        }else {
+            squareAfterMove.toggleOccupied();
+        }
+        squareBeforeMove.toggleOccupied();
+        return isCheck;
+    }
+
+    //TODO
+    // castling
+
     @Override
-    public List<Square> getMoves() {
+    protected List<Square> getMoves() {
         List<Square> moves = new ArrayList<Square>();
         Square checkSquare;
         // directions in witch to check for legal moves
@@ -140,12 +176,10 @@ public class King extends Piece {
 
             checkSquare = Square.getSquare((char) (this.getSquare().getFile() + fileDirection), this.getSquare().getRank() + rankDirection);
             if (checkSquare != null) {
-                if (!checkForCheck(this.getSquare(), checkSquare)) { // check if after this setHasMoved king will be under check
-                    if (!checkSquare.isOccupied()) {
-                        moves.add(checkSquare);
-                    } else if (checkSquare.getPiece().getColor() != this.getColor()) {
-                        moves.add(checkSquare);
-                    }
+                if (!checkSquare.isOccupied()) {
+                    moves.add(checkSquare);
+                } else if (checkSquare.getPiece().getColor() != this.getColor()) {
+                    moves.add(checkSquare);
                 }
             }
         }

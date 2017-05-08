@@ -105,21 +105,29 @@ public class Table {
                 public void mouseClicked(MouseEvent e) {
                     if(fromSquare == square) {
                         fromSquare = null;
+                        fromSquare.setToNormalColor();
+
                     }else if (fromSquare == null){
                         fromSquare = square;
+                        fromSquare.setToHighlight();
+
                     }else{
                         // second click
                         toSquare = square;
                         // TODO add player in move
                         if (Game.move(Game.getPlayerToMove(),fromSquare,toSquare)){
-                            SwingUtilities.invokeLater(new Runnable() {
-                                public void run() {
-                                    boardPanel.drawBoard();
-                                }
-                            });
+
                         }
+                        fromSquare.setToNormalColor();
+                        fromSquare = null;
+                        toSquare = null;
 
                     }
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            boardPanel.drawBoard();
+                        }
+                    });
 
                 }
 

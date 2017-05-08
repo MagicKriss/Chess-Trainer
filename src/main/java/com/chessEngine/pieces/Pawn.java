@@ -14,7 +14,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Square> getMoves() {
+    protected List<Square> getMoves() {
         List<Square> moves = new ArrayList<Square>();
         int direction = getColor() == Color.WHITE ? 1 : -1; // White pawns setHasMoved upward, black pawns setHasMoved downward
         Square checkSquare;
@@ -39,9 +39,10 @@ public class Pawn extends Piece {
     public String getPieceName() {
         return "Pawn";
     }
-    //            if (!((King) Game.getKing(this.getColor()).getPiece()).checkForCheck(this.getSquare(), checkSquare)) { // check if after this setHasMoved same color king will be under check
 
     // TODO
     // pawn promotion
+    //TODO
+    // en passant
 
 }

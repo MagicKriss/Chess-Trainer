@@ -40,7 +40,7 @@ public abstract class Piece {
         return color;
     }
 
-    public abstract List<Square> getMoves();
+    protected abstract List<Square> getMoves();
 
     public List<Square> getLegalMoves() {
         List<Square> legalMoves = new ArrayList<Square>();

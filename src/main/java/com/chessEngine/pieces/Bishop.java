@@ -14,8 +14,8 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public List<Square> getMoves() {
-        List<Square> legalMoves = new ArrayList<Square>();
+    protected List<Square> getMoves() {
+        List<Square> moves = new ArrayList<Square>();
         Square checkSquare;
         // directions in witch to check for legal moves
         int rankDirection = 0;
@@ -40,10 +40,10 @@ public class Bishop extends Piece {
                     break;
             }
 
-            legalMoves.addAll(MoveUtil.getLegalMoves(legalMoves, this,fileDirection,rankDirection));
+            moves.addAll(MoveUtil.getPossibleMoves(moves, this,fileDirection,rankDirection));
         }
 
-        return legalMoves;
+        return moves;
     }
 
     public String getPieceName() {

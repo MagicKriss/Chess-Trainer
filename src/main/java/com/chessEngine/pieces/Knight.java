@@ -13,8 +13,8 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<Square> getMoves() {
-        List<Square> legalMoves = new ArrayList<Square>();
+    protected List<Square> getMoves() {
+        List<Square> moves = new ArrayList<Square>();
         Square checkSquare;
         // directions in witch to check for legal moves
         int rankDirection = 0;
@@ -60,15 +60,13 @@ public class Knight extends Piece {
                 continue;
             }
             checkSquare = Square.getSquare((char) (this.getSquare().getFile() + fileDirection), this.getSquare().getRank() + (rankDirection));
-            if (!((King) Game.getKing(this.getColor())).checkForCheck(this.getSquare(), checkSquare)) { // check if after this setHasMoved same color king will be under check
-                if (!checkSquare.isOccupied()) {
-                    legalMoves.add(checkSquare);
-                } else if (checkSquare.getPiece().getColor() != this.getColor()) {
-                    legalMoves.add(checkSquare);
-                }
+            if (!checkSquare.isOccupied()) {
+                moves.add(checkSquare);
+            } else if (checkSquare.getPiece().getColor() != this.getColor()) {
+                moves.add(checkSquare);
             }
         }
-        return legalMoves;
+        return moves;
     }
 
     public String getPieceName() {

@@ -14,8 +14,8 @@ public class Queen extends Piece {
     }
 
     @Override
-    public List<Square> getMoves() {
-        List<Square> legalMoves = new ArrayList<Square>();
+    protected List<Square> getMoves() {
+        List<Square> moves = new ArrayList<Square>();
         // directions in witch to check for legal moves
         int rankDirection = 0;
         int fileDirection = 0;
@@ -54,16 +54,9 @@ public class Queen extends Piece {
                     fileDirection = 1;
                     break;
             }
-            for (Square move : MoveUtil.getLegalMoves(legalMoves, this, fileDirection, rankDirection)) {
-                if (!((King) Game.getKing(this.getColor())).checkForCheck(this.getSquare(), move)) { // check if after this setHasMoved same color king will be under check
-                    legalMoves.add(move); // if not, add this setHasMoved to legal moves
-                }
-            }
-            // legalMoves.addAll(MoveUtil.getMoves(legalMoves,this,fileDirection,rankDirection));
-
+                    moves.addAll(MoveUtil.getPossibleMoves(moves, this, fileDirection, rankDirection));
         }
-
-        return legalMoves;
+        return moves;
     }
 
     public String getPieceName() {

@@ -8,11 +8,12 @@ import java.awt.*;
 public class Square {
     public static final Color DARK = new Color(102, 85, 66);
     public static final Color LIGHT = new Color(237, 224, 208);
+    public static final Color HIGHLIGHT = new Color(234, 119, 119);
     private final char file;
     private final int rank;
     private boolean occupied;
     private Piece pieceOnTile;
-    private final Color color;
+    private Color color;
 
     Square(char file, int rank) {
         this.file = file;
@@ -23,6 +24,13 @@ public class Square {
         Game.Board.getBOARD().put(this.toString(), this);
     }
 
+    public void setToNormalColor(){
+        color = (file - 97 + rank) % 2 == 0 ? LIGHT : DARK;
+
+    }
+    public void setToHighlight(){
+        color = HIGHLIGHT ;
+    }
     public int getRank() {
         return rank;
     }
@@ -44,6 +52,9 @@ public class Square {
         if (!this.isOccupied()) {
             this.toggleOccupied();
         }
+    }
+    public void removePiece(){
+        this.pieceOnTile = null;
     }
 
     public Piece getPiece() {
