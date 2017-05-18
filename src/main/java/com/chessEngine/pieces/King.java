@@ -26,12 +26,6 @@ public class King extends Piece {
     }
 
     private boolean checkPieceForThreat(Square square) {
-        boolean foo = square.isOccupied();
-        if(foo) {
-            Piece fo = square.getPiece();
-            Color tf = fo.getColor();
-            Color t = this.getColor();
-        }
         if (square.isOccupied() && square.getPiece().getColor() != this.getColor()) {
             if (square.getPiece().getMoves() != null && square.getPiece().getMoves().contains(this.getSquare())) {
                 return true;
@@ -41,6 +35,7 @@ public class King extends Piece {
     }
 
     public boolean checkForCheck(Square squareBeforeMove, Square squareAfterMove) {
+        int foo;
         int kingRank = this.getSquare().getRank();
         int kingFile = this.getSquare().getFile();
         boolean isCheck = false;
@@ -87,35 +82,43 @@ public class King extends Piece {
         } else if (kingFile + kingRank == squareBeforeMove.getFile() + squareBeforeMove.getRank()) {
             if (squareAfterMove.getRank() + squareAfterMove.getFile() == kingRank + kingFile) {
             } else if (kingRank - squareBeforeMove.getRank() < 0) {
-                // moving from  left - down to  right - up
-                for (int i = 1; i < 9 - kingRank; i++) {
-                    if (checkPieceForThreat(Square.getSquare((char) (kingFile + i), kingRank + i))) {
+                // moving from right - down to  left - up
+                foo = 1;
+                while(kingFile - foo > 96 && kingRank + foo < 9){
+                    if (checkPieceForThreat(Square.getSquare((char) (kingFile - foo), kingRank + foo))) {
                         isCheck = true;
                     }
+                   foo++;
                 }
             } else {
                 // moving from right - up to  left - down
-                for (int i = kingRank - 1; i > kingRank - 1; i--) {
-                    if (checkPieceForThreat(Square.getSquare((char) (kingFile - i), kingRank - i))) {
+                foo = kingRank -1;
+                while(kingFile + foo > 96 && kingRank + foo > 0){
+                    if (checkPieceForThreat(Square.getSquare((char) (kingFile - foo), kingRank - foo))) {
                         isCheck = true;
                     }
+                    foo--;
                 }
             }
         } else if (kingFile - kingRank == squareBeforeMove.getFile() - squareBeforeMove.getRank()) {
             if (squareAfterMove.getRank() - squareAfterMove.getFile() == kingRank - kingFile) {
             } else if (kingRank - squareBeforeMove.getRank() < 0) {
-                // moving from right - down to  left - up
-                for (int i = 1; i < 9 - kingRank; i++) {
-                    if (checkPieceForThreat(Square.getSquare((char) (kingFile - i), kingRank + i))) {
+                // moving from  left - down to  right - up
+                foo = 1;
+                while(kingFile + foo < 105 && kingRank + foo < 9){
+                    if (checkPieceForThreat(Square.getSquare((char) (kingFile + foo), kingRank + foo))) {
                         isCheck = true;
                     }
+                    foo ++;
                 }
             } else {
                 // moving from left - up to right - down
-                for (int i = kingRank - 1; i > kingRank - 1; i--) {
-                    if (checkPieceForThreat(Square.getSquare((char) (kingFile + i), kingRank - i))) {
+                foo = kingRank - 1;
+                while(kingFile + foo < 105 && kingRank + foo > 0){
+                    if (checkPieceForThreat(Square.getSquare((char) (kingFile + foo), kingRank - foo))) {
                         isCheck = true;
                     }
+                    foo --;
                 }
             }
         }

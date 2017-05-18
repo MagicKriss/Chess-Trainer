@@ -61,9 +61,7 @@ public class Game {
         // TODO
         // need to handle moves when king is under check
         Piece pieceToMove;
-        java.util.List<Square> foo;
         if (player.getColor() == playerToMove.getColor() && fromSquare.isOccupied()) {
-            Square fooSq = Square.getSquare('e',7);
             pieceToMove = fromSquare.getPiece();
             if (pieceToMove.getColor() == player.getColor() && pieceToMove.getLegalMoves().contains(toSquare)) {
                 toSquare.setPieceOnTile(pieceToMove);

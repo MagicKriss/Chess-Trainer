@@ -25,7 +25,7 @@ public class Square {
     }
 
     public void setToNormalColor(){
-        color = (file - 97 + rank) % 2 == 0 ? LIGHT : DARK;
+        this.color = (this.file - 97 + this.rank) % 2 == 0 ? LIGHT : DARK;
 
     }
     public void setToHighlight(){

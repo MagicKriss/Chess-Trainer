@@ -104,8 +104,9 @@ public class Table {
             addMouseListener(new MouseListener() {
                 public void mouseClicked(MouseEvent e) {
                     if(fromSquare == square) {
-                        fromSquare = null;
                         fromSquare.setToNormalColor();
+                        fromSquare = null;
+
 
                     }else if (fromSquare == null){
                         fromSquare = square;
