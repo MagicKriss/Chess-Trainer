@@ -14,7 +14,7 @@ import java.util.Set;
 public class King extends Piece {
     private boolean check;
 
-    public King(char file, int rank, Color color) throws Exception {
+    public King(char file, int rank, Color color) throws OccupiedSquareException {
         super(file, rank, color);
         check = false;
     }
@@ -181,9 +181,7 @@ public class King extends Piece {
 
             checkSquare = Square.getSquare((char) (this.getSquare().getFile() + fileDirection), this.getSquare().getRank() + rankDirection);
             if (checkSquare != null) {
-                if (!checkSquare.isOccupied()) {
-                    moves.add(checkSquare);
-                } else if (checkSquare.getPiece().getColor() != this.getColor()) {
+                if (!checkSquare.isOccupied() || checkSquare.getPiece().getColor() != this.getColor()) {
                     moves.add(checkSquare);
                 }
             }

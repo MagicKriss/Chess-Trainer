@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class Bishop extends Piece {
 
-    public Bishop(char file, int rank, Color color) throws Exception {
+    public Bishop(char file, int rank, Color color) throws OccupiedSquareException {
         super(file, rank, color);
     }
 

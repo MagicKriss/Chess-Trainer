@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Knight extends Piece {
-    public Knight(char file, int rank, Color color) throws Exception {
+    public Knight(char file, int rank, Color color) throws OccupiedSquareException {
         super(file, rank, color);
     }
 

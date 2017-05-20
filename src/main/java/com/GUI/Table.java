@@ -1,8 +1,8 @@
 package com.GUI;
 
 import com.chessEngine.game.Game;
-import com.chessEngine.game.Player;
 import com.chessEngine.game.Square;
+import com.chessEngine.pieces.Piece;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Table {
 
-    private static int currentLevel;
+    private int currentLevel;
     private static Table table;
     private static JFrame gameFrame;
     private BoardPanel boardPanel;
@@ -62,12 +62,13 @@ public class Table {
         gameFrame.add(this.boardPanel, BorderLayout.CENTER);
         this.sidePanel = new JPanel();
         this.sidePanel.setPreferredSize(SIDE_PANEL_DIMENSIONS);
-        this.sideLabel = new JLabel("Your are playing as ");
+        this.sideLabel = new JLabel();
         this.sideLabel.setFont(new Font("Verdana", 1, 15));
         this.colorLabel = new JLabel();
 
         if (Game.getHeroe() != null) {
             String color = Game.getHeroe().getColor() == Color.WHITE ? "WHITE" : "BLACK";
+            this.sideLabel.setText("Your are playing as ");
             this.colorLabel.setText(color);
             this.colorLabel.setForeground(Game.getHeroe().getColor());
             this.colorLabel.setFont(new Font("Verdana", 1, 20));
@@ -131,7 +132,7 @@ public class Table {
                     Game.newLevel("level1");
                     currentLevel = 1;
                     render();
-                } catch (Exception e1) {
+                } catch (Piece.OccupiedSquareException e1) {
                     e1.printStackTrace();
                 }
             }
@@ -238,7 +239,7 @@ public class Table {
                                                     currentLevel++;
                                                     Game.newLevel("level" + currentLevel);
                                                     render();
-                                                } catch (Exception e1) {
+                                                } catch (Piece.OccupiedSquareException e1) {
                                                     e1.printStackTrace();
                                                 }
                                             }

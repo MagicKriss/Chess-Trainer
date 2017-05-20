@@ -10,7 +10,7 @@ import java.util.Set;
 
 
 public class Rook extends Piece {
-    public Rook(char file, int rank, Color color) throws Exception {
+    public Rook(char file, int rank, Color color) throws OccupiedSquareException {
         super(file, rank, color);
     }
 

@@ -11,7 +11,7 @@ import java.util.Set;
 public class Pawn extends Piece {
 
 
-    public Pawn(char file, int rank, Color color) throws Exception {
+    public Pawn(char file, int rank, Color color) throws OccupiedSquareException {
         super(file, rank, color);
     }
 

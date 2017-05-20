@@ -13,9 +13,9 @@ public abstract class Piece {
     private final Color color;
     private boolean hasMoved;
 
-    Piece(char file, int rank, Color color) throws Exception {
+    Piece(char file, int rank, Color color) throws OccupiedSquareException {
         if (Square.getSquare(file, rank).isOccupied()) {
-            throw new Exception("This Square is occupied");
+            throw new OccupiedSquareException("This Square is occupied");
         }
 
         this.square = Square.getSquare(file, rank);
@@ -23,12 +23,15 @@ public abstract class Piece {
         this.getSquare().toggleOccupied();
         hasMoved = false;
     }
-    public void setHasMoved(){
+
+    public void setHasMoved() {
         hasMoved = true;
     }
-    public boolean getHasMoved () {
+
+    public boolean getHasMoved() {
         return hasMoved;
     }
+
     public Square getSquare() {
         return square;
     }
@@ -42,21 +45,32 @@ public abstract class Piece {
     }
 
     public abstract Set<Square> getMoves();
-/*
-    public List<Square> getLegalMoves() {
-        List<Square> legalMoves = new ArrayList<Square>();
-        for (Square move : this.getMoves()) {
-            if (!((King) Game.getKing(this.getColor())).checkForCheck(this.getSquare(), move)) {
-                legalMoves.add(move);
-            }
-        }
-     //TODO
-        // en passant
 
-        return legalMoves;
-    }
-    */
+    /*
+        public List<Square> getLegalMoves() {
+            List<Square> legalMoves = new ArrayList<Square>();
+            for (Square move : this.getMoves()) {
+                if (!((King) Game.getKing(this.getColor())).checkForCheck(this.getSquare(), move)) {
+                    legalMoves.add(move);
+                }
+            }
+         //TODO
+            // en passant
+
+            return legalMoves;
+        }
+        */
     public abstract String getPieceName();
+
+    public class OccupiedSquareException extends Exception {
+        public OccupiedSquareException() {
+            super();
+        }
+
+        public OccupiedSquareException(String message) {
+            super(message);
+        }
+    }
 
 
 }

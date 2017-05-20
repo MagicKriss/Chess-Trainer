@@ -19,11 +19,11 @@ public class Game {
     private static Player computer;
     private static List<NextMove> levelMoveList = new ArrayList<NextMove>();
 
-    private Game() throws Exception {
+    private Game() throws Piece.OccupiedSquareException {
         Board.BoardBuilder.emptyBoardWhiteSide();
     }
 
-    public static void newLevel(String level) throws Exception {
+    public static void newLevel(String level) throws Piece.OccupiedSquareException {
         if (level.equals("level1")) {
             Board.BoardBuilder.level1();
         } else if (level.equals("level2")) {
@@ -43,7 +43,7 @@ public class Game {
         return game;
     }
 
-    public static Game newGame() throws Exception {
+    public static Game newGame() throws Piece.OccupiedSquareException {
         game = new Game();
         return game;
     }
@@ -157,7 +157,7 @@ public class Game {
                 }
             }
 
-            public static void defaultBoard() throws Exception {
+            public static void defaultBoard() throws Piece.OccupiedSquareException {
                 emptyBoardWhiteSide();
                 BOARD.get("a1").setPieceOnTile(new Rook('a', 1, Color.WHITE));
                 BOARD.get("b1").setPieceOnTile(new Knight('b', 1, Color.WHITE));
@@ -184,7 +184,7 @@ public class Game {
                 Game.setPlayerToMove(whitePlayer);
             }
 
-            public static void level1() throws Exception {
+            public static void level1() throws Piece.OccupiedSquareException {
                 emptyBoardWhiteSide();
                 BOARD.get("a1").setPieceOnTile(new Rook('a', 1, Color.WHITE));
                 BOARD.get("b1").setPieceOnTile(new Knight('b', 1, Color.WHITE));
@@ -228,7 +228,7 @@ public class Game {
                 setLevelMoveList(moveList);
             }
 
-            public static void level2() throws Exception {
+            public static void level2() throws Piece.OccupiedSquareException {
                 emptyBoardWhiteSide();
                 BOARD.get("d1").setPieceOnTile(new Rook('d', 1, Color.WHITE));
                 BOARD.get("e1").setPieceOnTile(new King('e', 1, Color.WHITE));
@@ -273,7 +273,7 @@ public class Game {
                 setLevelMoveList(moveList);
             }
 
-            public static void level3() throws Exception {
+            public static void level3() throws Piece.OccupiedSquareException {
                 emptyBoardWhiteSide();
                 BOARD.get("a1").setPieceOnTile(new Rook('a', 1, Color.WHITE));
                 BOARD.get("c1").setPieceOnTile(new Bishop('c', 1, Color.WHITE));
@@ -318,7 +318,7 @@ public class Game {
                 setLevelMoveList(moveList);
             }
 
-            public static void level4() throws Exception {
+            public static void level4() throws Piece.OccupiedSquareException {
                 emptyBoardWhiteSide();
                 BOARD.get("f2").setPieceOnTile(new Pawn('f', 2, Color.WHITE));
 
@@ -346,7 +346,7 @@ public class Game {
                 setLevelMoveList(moveList);
             }
 
-            public static void level5() throws Exception {
+            public static void level5() throws Piece.OccupiedSquareException {
                 emptyBoardBlackSide();
                 BOARD.get("c1").setPieceOnTile(new Rook('c', 1, Color.WHITE));
                 BOARD.get("d1").setPieceOnTile(new Queen('d', 1, Color.WHITE));

@@ -11,7 +11,7 @@ import java.util.Set;
 
 
 public class Queen extends Piece {
-    public Queen(char file, int rank, Color color) throws Exception {
+    public Queen(char file, int rank, Color color) throws OccupiedSquareException {
         super(file, rank, color);
     }
 
