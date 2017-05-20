@@ -4,7 +4,9 @@ import com.chessEngine.game.Square;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class Rook extends Piece {
@@ -14,31 +16,31 @@ public class Rook extends Piece {
 
 
     @Override
-    public List<Square> getMoves() {
-        List<Square> moves = new ArrayList<Square>();
+    public Set<Square> getMoves() {
+        Set<Square> moves = new HashSet();
         // directions in witch to check for legal moves
         int rankDirection = 0;
         int fileDirection = 0;
         for (int i = 0; i < 4; i++) {
             switch (i) {
                 case 0:
-                    rankDirection = 0;
-                    fileDirection = 1;
+                    rankDirection = -1;
+                    fileDirection = 0;
                     break;
                 case 1:
                     rankDirection = 0;
                     fileDirection = -1;
                     break;
                 case 2:
-                    rankDirection = -1;
+                    rankDirection = 1;
                     fileDirection = 0;
                     break;
                 case 3:
-                    rankDirection = -1;
-                    fileDirection = -0;
+                    rankDirection = 0;
+                    fileDirection = 1;
                     break;
             }
-            moves.addAll(MoveUtil.getPossibleMoves(moves, this, fileDirection, rankDirection));
+            moves = MoveUtil.getPossibleMoves(moves, this, fileDirection, rankDirection);
         }
         return moves;
     }

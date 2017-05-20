@@ -4,7 +4,9 @@ import com.chessEngine.game.Square;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by user on 17.26.4.
@@ -25,7 +27,7 @@ public class King extends Piece {
         return check;
     }
 
-    private boolean checkPieceForThreat(Square square) {
+   /*  private boolean checkPieceForThreat(Square square) {
         if (square.isOccupied() && square.getPiece().getColor() != this.getColor()) {
             if (square.getPiece().getMoves() != null && square.getPiece().getMoves().contains(this.getSquare())) {
                 return true;
@@ -34,7 +36,7 @@ public class King extends Piece {
         return false;
     }
 
-    public boolean checkForCheck(Square squareBeforeMove, Square squareAfterMove) {
+   public boolean checkForCheck(Square squareBeforeMove, Square squareAfterMove) {
         int foo;
         int kingRank = this.getSquare().getRank();
         int kingFile = this.getSquare().getFile();
@@ -130,13 +132,13 @@ public class King extends Piece {
         squareBeforeMove.toggleOccupied();
         return isCheck;
     }
-
+*/
     //TODO
     // castling
 
     @Override
-    protected List<Square> getMoves() {
-        List<Square> moves = new ArrayList<Square>();
+    public Set<Square> getMoves() {
+        Set<Square> moves = new HashSet();
         Square checkSquare;
         // directions in witch to check for legal moves
         int rankDirection = 0;

@@ -6,6 +6,7 @@ import com.chessEngine.game.Square;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Piece {
     private Square square;
@@ -40,8 +41,8 @@ public abstract class Piece {
         return color;
     }
 
-    protected abstract List<Square> getMoves();
-
+    public abstract Set<Square> getMoves();
+/*
     public List<Square> getLegalMoves() {
         List<Square> legalMoves = new ArrayList<Square>();
         for (Square move : this.getMoves()) {
@@ -49,11 +50,12 @@ public abstract class Piece {
                 legalMoves.add(move);
             }
         }
-        //TODO
+     //TODO
         // en passant
 
         return legalMoves;
     }
+    */
     public abstract String getPieceName();
 
 

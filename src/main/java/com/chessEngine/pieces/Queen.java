@@ -5,7 +5,9 @@ import com.chessEngine.game.Square;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class Queen extends Piece {
@@ -14,8 +16,8 @@ public class Queen extends Piece {
     }
 
     @Override
-    protected List<Square> getMoves() {
-        List<Square> moves = new ArrayList<Square>();
+    public Set<Square> getMoves() {
+        Set<Square> moves = new HashSet();
         // directions in witch to check for legal moves
         int rankDirection = 0;
         int fileDirection = 0;
@@ -54,7 +56,7 @@ public class Queen extends Piece {
                     fileDirection = 1;
                     break;
             }
-                    moves.addAll(MoveUtil.getPossibleMoves(moves, this, fileDirection, rankDirection));
+                    moves = (MoveUtil.getPossibleMoves(moves, this, fileDirection, rankDirection));
         }
         return moves;
     }

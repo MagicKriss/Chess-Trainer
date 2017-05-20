@@ -6,9 +6,12 @@ import java.awt.*;
 
 
 public class Square {
-    public static final Color DARK = new Color(102, 85, 66);
-    public static final Color LIGHT = new Color(237, 224, 208);
+    public static final Color DARK = new Color(181, 136, 99);
+    public static final Color LIGHT = new Color(240, 217, 181);
     public static final Color HIGHLIGHT = new Color(234, 119, 119);
+    public static final Color MOVED_LIGHT = new Color(248, 236, 116);
+    public static final Color MOVED_DARK = new Color(218, 195, 75);
+
     private final char file;
     private final int rank;
     private boolean occupied;
@@ -30,6 +33,10 @@ public class Square {
     }
     public void setToHighlight(){
         color = HIGHLIGHT ;
+    }
+
+    public void setToMovedColor(){
+        this.color = (this.file - 97 + this.rank) % 2 == 0 ? MOVED_LIGHT : MOVED_DARK;
     }
     public int getRank() {
         return rank;
