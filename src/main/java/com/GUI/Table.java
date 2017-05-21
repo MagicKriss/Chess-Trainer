@@ -4,18 +4,15 @@ import com.chessEngine.game.Game;
 import com.chessEngine.game.Square;
 import com.chessEngine.pieces.Piece;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 
 public class Table {
@@ -27,18 +24,19 @@ public class Table {
     private JPanel sidePanel;
     private JLabel sideLabel;
     private JLabel colorLabel;
-    private final static String PIECE_ICON_PATH = "images/simple/";
+    private final static String ABOUT_PATH = "resources/about.txt";
+    private final static String PIECE_ICON_PATH = "resources/images/other/";
     private static Square fromSquare;
     private static Square toSquare;
     private final static Dimension FRAME_DIMENSIONS = new Dimension(800, 600);
     private final static Dimension BOARD_PANEL_DIMENSIONS = new Dimension(400, 350);
-    private final static Dimension SIDE_PANEL_DIMENSIONS = new Dimension(200, 200);
+    private final static Dimension SIDE_PANEL_DIMENSIONS = new Dimension(200, 350);
 
-    private final static Dimension SQUARE_PANEL_DIMENSIONS = new Dimension(10, 10);
     private List<Game.NextMove> levelMoveList;
     private int iter;
 
-    public static Table newTable() {
+    public static Table newTable() throws Piece.OccupiedSquareException {
+        Game.newGame();
         table = new Table();
         return table;
     }
@@ -55,12 +53,13 @@ public class Table {
 
     private void render() {
         if (this.boardPanel != null) {
+            gameFrame.remove(this.sidePanel);
             gameFrame.remove(this.boardPanel);
         }
 
         this.boardPanel = new BoardPanel();
-        gameFrame.add(this.boardPanel, BorderLayout.CENTER);
         this.sidePanel = new JPanel();
+        this.sidePanel.setBackground(new Color(206, 165, 165));
         this.sidePanel.setPreferredSize(SIDE_PANEL_DIMENSIONS);
         this.sideLabel = new JLabel();
         this.sideLabel.setFont(new Font("Verdana", 1, 15));
@@ -76,6 +75,7 @@ public class Table {
             this.sidePanel.add(colorLabel);
         }
         gameFrame.add(this.sidePanel, BorderLayout.EAST);
+        gameFrame.add(this.boardPanel, BorderLayout.CENTER);
         gameFrame.setVisible(true);
         levelMoveList = Game.getLevelMoveList();
         iter = 0;
@@ -119,33 +119,78 @@ public class Table {
 
     private JMenuBar createTableMenuBar() {
         JMenuBar tableMenuBar = new JMenuBar();
-        tableMenuBar.add(createFileMenu(tableMenuBar));
+        tableMenuBar.add(createFileMenu());
         return tableMenuBar;
     }
 
-    private JMenu createFileMenu(JMenuBar tableMenuBar) {
-        JMenu fileMenu = new JMenu("File");
-        JMenuItem newGame = new JMenuItem("Start Game");
+    private JMenu createFileMenu() {
+
+        final JMenu fileMenu = new JMenu("File");
+        final JMenuItem newGame = new JMenuItem("Start Game");
+        final JMenuItem hint = new JMenuItem("Show Hint");
+        final JMenuItem about = new JMenuItem("About");
+        final JMenuItem exit = new JMenuItem("Exit");
         newGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Game.newLevel("level1");
                     currentLevel = 1;
                     render();
+                    hint.setEnabled(true);
                 } catch (Piece.OccupiedSquareException e1) {
                     e1.printStackTrace();
                 }
             }
         });
-        JMenuItem exit = new JMenuItem("Exit");
+
+        hint.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                showMessage(Game.getHint(), "Hint");
+            }
+        });
+        about.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    showMessage(getAbout(), "About");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
         exit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
+        hint.setEnabled(false);
         fileMenu.add(newGame);
+        fileMenu.add(hint);
+        fileMenu.add(about);
         fileMenu.add(exit);
         return fileMenu;
+    }
+
+    private String getAbout() throws IOException {
+        String about;
+        // fen[0] = fen notation
+        // fen[1] = level move list
+        // fen [2] = level hint
+        String[] fen = new String[3];
+        StringBuilder sb = new StringBuilder();
+        BufferedReader br = new BufferedReader(new FileReader(ABOUT_PATH));
+        try {
+
+            String line = br.readLine();
+            while (line != null) {
+                sb.append(line);
+                sb.append('\n');
+                line = br.readLine();
+            }
+            about = sb.toString();
+        } finally {
+            br.close();
+        }
+        return about;
     }
 
     private class BoardPanel extends JPanel {
@@ -161,15 +206,34 @@ public class Table {
                     add(squarePanel);
                 }
             }
+            addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentResized(ComponentEvent e) {
+                    drawBoard();
+                }
+            });
             setPreferredSize(BOARD_PANEL_DIMENSIONS);
             validate();
         }
 
         private void drawBoard() {
+            ListIterator it;
             removeAll();
-            for (SquarePanel squarePanel : boardSquares) {
-                squarePanel.drawSquare();
-                add(squarePanel);
+            SquarePanel squarePanel;
+            if (Game.getHeroe() != null && Game.getHeroe().getColor().equals(Color.BLACK)) {
+                it = boardSquares.listIterator(boardSquares.size());
+                while (it.hasPrevious()) {
+                    squarePanel = (SquarePanel) it.previous();
+                    squarePanel.drawSquare();
+                    add(squarePanel);
+                }
+            } else {
+                it = boardSquares.listIterator();
+                while (it.hasNext()) {
+                    squarePanel = (SquarePanel) it.next();
+                    squarePanel.drawSquare();
+                    add(squarePanel);
+                }
             }
             validate();
             repaint();
@@ -202,7 +266,7 @@ public class Table {
         SquarePanel(final BoardPanel boardPanel, final Square square) {
             super(new GridBagLayout());
             this.square = square;
-            setPreferredSize(SQUARE_PANEL_DIMENSIONS);
+            setPreferredSize(new Dimension(boardPanel.getWidth() / 8, boardPanel.getHeight() / 8));
             setBackground(square.getColor());
             assignPiece();
             addMouseListener(new MouseListener() {
@@ -230,6 +294,14 @@ public class Table {
                                     if (iter == levelMoveList.size()) {
                                         if (currentLevel == Game.LEVEL_COUNT) {
                                             showMessage("You complected all levels!", "CONGRATULATION!");
+                                            try {
+                                                // disable "Hint" item in menu bar
+                                                gameFrame.getJMenuBar().getMenu(0).getItem(1).setEnabled(false);
+                                                Game.newLevel("");
+                                                render();
+                                            } catch (Piece.OccupiedSquareException e1) {
+                                                e1.printStackTrace();
+                                            }
 
                                         } else {
                                             int response = showNextMessage("You complected this level!", "CONGRATULATION!");
@@ -294,7 +366,8 @@ public class Table {
             if (square.isOccupied()) {
                 colorName = square.getPiece().getColor() == Color.WHITE ? "White" : "Black";
                 try {
-                    BufferedImage image = ImageIO.read(new File(PIECE_ICON_PATH + square.getPiece().getPieceName() + "_" + colorName + ".gif"));
+                    BufferedImage image = ImageIO.read(new File(PIECE_ICON_PATH + square.getPiece().getPieceName() + "_" + colorName + ".png"));
+                    image = resize(image, boardPanel.getHeight() / 10, boardPanel.getHeight() / 10);
                     add(new JLabel(new ImageIcon(image)));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -302,11 +375,20 @@ public class Table {
             }
         }
 
+        private BufferedImage resize(BufferedImage image, int width, int height) {
+            BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
+            Graphics2D g2d = (Graphics2D) bi.createGraphics();
+            g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+            g2d.drawImage(image, 0, 0, width, height, null);
+            g2d.dispose();
+            return bi;
+        }
 
         public void drawSquare() {
             removeAll();
             setBackground(square.getColor());
             assignPiece();
+            validate();
         }
     }
 

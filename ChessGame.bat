@@ -1,0 +1,1 @@
+start cmd /C "cd c:\stud\Chess-Trainer && java -cp c:\stud\Chess-Trainer\out\artifacts\ChessTrainer_jar\ChessTrainer.jar com.Play"

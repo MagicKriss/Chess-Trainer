@@ -6,10 +6,9 @@ import com.chessEngine.game.Game;
 /**
  * Created by Krisjanis on 07.05.2017.
  */
-public class ChessGame {
+public class Play {
 
     public static void main(String[] args) throws Exception {
-        Game game = Game.newGame();
         Table table = Table.newTable();
     }
 

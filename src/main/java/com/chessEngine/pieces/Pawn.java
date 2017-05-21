@@ -15,6 +15,13 @@ public class Pawn extends Piece {
         super(file, rank, color);
     }
 
+    public Pawn(char file, int rank, Color color, boolean hasMoved) throws OccupiedSquareException {
+        super(file, rank, color);
+        if (hasMoved) {
+            this.setHasMoved();
+        }
+    }
+
     @Override
     public Set<Square> getMoves() {
         Set<Square> moves = new HashSet();

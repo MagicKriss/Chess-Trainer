@@ -1,0 +1,5 @@
+This is Chess Trainer version 1.0
+The main goal of this project is to help chess players train their tactics with playing out different situations on variety of boards.
+It was made by Krišjānis Kallings as a 2nd year course work for university.
+You can find this project on https://github.com/MagicKriss/Chess-Trainer
+If you have any questions, write  me to krisjanis.kallings@gmail.com

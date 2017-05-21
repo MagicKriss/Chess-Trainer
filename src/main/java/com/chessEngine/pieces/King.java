@@ -19,6 +19,12 @@ public class King extends Piece {
         check = false;
     }
 
+    public King(char file, int rank, Color color, boolean hasMoved) throws OccupiedSquareException {
+        super(file, rank, color);
+        if (hasMoved) {
+            this.setHasMoved();
+        }    }
+
     public void toggleCheck() {
         check = !check;
     }

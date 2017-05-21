@@ -14,6 +14,12 @@ public class Rook extends Piece {
         super(file, rank, color);
     }
 
+    public Rook(char file, int rank, Color color, boolean hasMoved) throws OccupiedSquareException {
+        super(file, rank, color);
+        if (hasMoved) {
+            this.setHasMoved();
+        }
+    }
 
     @Override
     public Set<Square> getMoves() {
