@@ -1,11 +1,9 @@
-package com.chessEngine.pieces;
+package com.chessengine.pieces;
 
-import com.chessEngine.game.Square;
+import com.chessengine.game.Square;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Pawn extends Piece {
@@ -24,7 +22,7 @@ public class Pawn extends Piece {
 
     @Override
     public Set<Square> getMoves() {
-        Set<Square> moves = new HashSet();
+        HashSet<Square> moves = new HashSet<>();
         int direction = getColor() == Color.WHITE ? 1 : -1; // White pawns setHasMoved upward, black pawns setHasMoved downward
         Square checkSquare;
         checkSquare = Square.getSquare(this.getSquare().getFile(), this.getSquare().getRank() + direction);

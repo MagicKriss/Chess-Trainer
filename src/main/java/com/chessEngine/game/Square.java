@@ -1,6 +1,6 @@
-package com.chessEngine.game;
+package com.chessengine.game;
 
-import com.chessEngine.pieces.*;
+import com.chessengine.pieces.*;
 
 import java.awt.*;
 
@@ -24,7 +24,7 @@ public class Square {
         occupied = false;
         pieceOnTile = null;
         color = (file - 97 + rank) % 2 == 0 ? LIGHT : DARK;
-        Game.Board.getBOARD().put(this.toString(), this);
+        Game.Board.getBoardMap().put(this.toString(), this);
     }
 
     public void setToNormalColor(){
@@ -77,7 +77,7 @@ public class Square {
     }
 
     public static Square getSquare(char file, int rank) {
-        return Game.Board.getBOARD().get(String.valueOf(file) + rank);
+        return Game.Board.getBoardMap().get(String.valueOf(file) + rank);
     }
 
 }

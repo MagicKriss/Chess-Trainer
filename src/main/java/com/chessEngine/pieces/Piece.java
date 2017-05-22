@@ -1,11 +1,9 @@
-package com.chessEngine.pieces;
+package com.chessengine.pieces;
 
-import com.chessEngine.game.Game;
-import com.chessEngine.game.Square;
+
+import com.chessengine.game.Square;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 public abstract class Piece {
@@ -63,11 +61,7 @@ public abstract class Piece {
     public abstract String getPieceName();
 
     public class OccupiedSquareException extends Exception {
-        public OccupiedSquareException() {
-            super();
-        }
-
-        public OccupiedSquareException(String message) {
+        OccupiedSquareException(String message) {
             super(message);
         }
     }

@@ -1,8 +1,8 @@
 package com.GUI;
 
-import com.chessEngine.game.Game;
-import com.chessEngine.game.Square;
-import com.chessEngine.pieces.Piece;
+import com.chessengine.game.Game;
+import com.chessengine.game.Square;
+import com.chessengine.pieces.Piece;
 
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -14,6 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Table {
 
@@ -22,8 +24,6 @@ public class Table {
     private static JFrame gameFrame;
     private BoardPanel boardPanel;
     private JPanel sidePanel;
-    private JLabel sideLabel;
-    private JLabel colorLabel;
     private final static String ABOUT_PATH = "resources/about.txt";
     private final static String PIECE_ICON_PATH = "resources/images/other/";
     private static Square fromSquare;
@@ -31,14 +31,14 @@ public class Table {
     private final static Dimension FRAME_DIMENSIONS = new Dimension(800, 600);
     private final static Dimension BOARD_PANEL_DIMENSIONS = new Dimension(400, 350);
     private final static Dimension SIDE_PANEL_DIMENSIONS = new Dimension(200, 350);
+    private static final Logger LOGGER = Logger.getLogger(Table.class.getName());
 
     private List<Game.NextMove> levelMoveList;
     private int iter;
 
-    public static Table newTable() throws Piece.OccupiedSquareException {
+    public static void newTable() throws Piece.OccupiedSquareException {
         Game.newGame();
         table = new Table();
-        return table;
     }
 
     private Table() {
@@ -61,16 +61,16 @@ public class Table {
         this.sidePanel = new JPanel();
         this.sidePanel.setBackground(new Color(206, 165, 165));
         this.sidePanel.setPreferredSize(SIDE_PANEL_DIMENSIONS);
-        this.sideLabel = new JLabel();
-        this.sideLabel.setFont(new Font("Verdana", 1, 15));
-        this.colorLabel = new JLabel();
+        JLabel sideLabel = new JLabel();
+        sideLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+        JLabel colorLabel = new JLabel();
 
         if (Game.getHeroe() != null) {
             String color = Game.getHeroe().getColor() == Color.WHITE ? "WHITE" : "BLACK";
-            this.sideLabel.setText("Your are playing as ");
-            this.colorLabel.setText(color);
-            this.colorLabel.setForeground(Game.getHeroe().getColor());
-            this.colorLabel.setFont(new Font("Verdana", 1, 20));
+            sideLabel.setText("Your are playing as ");
+            colorLabel.setText(color);
+            colorLabel.setForeground(Game.getHeroe().getColor());
+            colorLabel.setFont(new Font("Verdana", Font.BOLD, 20));
             this.sidePanel.add(sideLabel);
             this.sidePanel.add(colorLabel);
         }
@@ -102,7 +102,8 @@ public class Table {
             try {
                 TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, e.toString(), e);
+                Thread.currentThread().interrupt();
             }
             Game.NextMove move = Game.getLevelMoveList().get(iter);
             Game.move(Game.getComputer(), move.getFromSquare(), move.getToSquare(), iter);
@@ -131,35 +132,40 @@ public class Table {
         final JMenuItem about = new JMenuItem("About");
         final JMenuItem exit = new JMenuItem("Exit");
         newGame.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     Game.newLevel("level1");
                     currentLevel = 1;
                     render();
                     hint.setEnabled(true);
-                } catch (Piece.OccupiedSquareException e1) {
-                    e1.printStackTrace();
+                } catch (Piece.OccupiedSquareException ex) {
+                    LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
             }
         });
 
         hint.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 showMessage(Game.getHint(), "Hint");
             }
         });
         about.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     showMessage(getAbout(), "About");
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                } catch (IOException ex) {
+                    LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
             }
         });
         exit.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                gameFrame.setVisible(false);
+                gameFrame.dispose();
             }
         });
         hint.setEnabled(false);
@@ -172,13 +178,8 @@ public class Table {
 
     private String getAbout() throws IOException {
         String about;
-        // fen[0] = fen notation
-        // fen[1] = level move list
-        // fen [2] = level hint
-        String[] fen = new String[3];
         StringBuilder sb = new StringBuilder();
-        BufferedReader br = new BufferedReader(new FileReader(ABOUT_PATH));
-        try {
+        try (BufferedReader br = new BufferedReader(new FileReader(ABOUT_PATH))) {
 
             String line = br.readLine();
             while (line != null) {
@@ -187,18 +188,16 @@ public class Table {
                 line = br.readLine();
             }
             about = sb.toString();
-        } finally {
-            br.close();
         }
         return about;
     }
 
     private class BoardPanel extends JPanel {
-        List<SquarePanel> boardSquares;
+        private List<SquarePanel> boardSquares;
 
         BoardPanel() {
             super(new GridLayout(8, 8));
-            this.boardSquares = new ArrayList<SquarePanel>();
+            this.boardSquares = new ArrayList<>();
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     SquarePanel squarePanel = new SquarePanel(this, Square.getSquare((char) ('a' + j), 8 - i));
@@ -248,17 +247,6 @@ public class Table {
                 JOptionPane.PLAIN_MESSAGE);
     }
 
-    private int showNextMessage(String message, String title) {
-        Object[] options = {"Next Level", "Close"};
-        return JOptionPane.showOptionDialog(gameFrame,
-                message,
-                title,
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.PLAIN_MESSAGE,
-                null,     //do not use a custom Icon
-                options,  //the titles of buttons
-                options[0]); //default button title
-    }
 
     private class SquarePanel extends JPanel {
         private final Square square;
@@ -288,37 +276,40 @@ public class Table {
                             toSquare.setToMovedColor();
                             iter++;
                             SwingUtilities.invokeLater(new Runnable() {
+                                @Override
                                 public void run() {
                                     boardPanel.drawBoard();
 
                                     if (iter == levelMoveList.size()) {
-                                        if (currentLevel == Game.LEVEL_COUNT) {
+                                        if (currentLevel == Game.getLevelCount()) {
                                             showMessage("You complected all levels!", "CONGRATULATION!");
                                             try {
                                                 // disable "Hint" item in menu bar
                                                 gameFrame.getJMenuBar().getMenu(0).getItem(1).setEnabled(false);
                                                 Game.newLevel("");
                                                 render();
-                                            } catch (Piece.OccupiedSquareException e1) {
-                                                e1.printStackTrace();
+                                            } catch (Piece.OccupiedSquareException ex) {
+                                                LOGGER.log(Level.SEVERE, ex.toString(), ex);
+
                                             }
 
                                         } else {
-                                            int response = showNextMessage("You complected this level!", "CONGRATULATION!");
+                                            int response = showNextMessage();
                                             //Next = 0, Close = 1
                                             if (response == 0) {
                                                 try {
                                                     currentLevel++;
                                                     Game.newLevel("level" + currentLevel);
                                                     render();
-                                                } catch (Piece.OccupiedSquareException e1) {
-                                                    e1.printStackTrace();
+                                                } catch (Piece.OccupiedSquareException ex) {
+                                                    LOGGER.log(Level.SEVERE, ex.toString(), ex);
                                                 }
                                             }
 
                                         }
                                     } else {
                                         SwingUtilities.invokeLater(new Runnable() {
+                                            @Override
                                             public void run() {
                                                 makeComputersMove();
                                             }
@@ -370,21 +361,33 @@ public class Table {
                     image = resize(image, boardPanel.getHeight() / 10, boardPanel.getHeight() / 10);
                     add(new JLabel(new ImageIcon(image)));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
             }
         }
 
+        private int showNextMessage() {
+            Object[] options = {"Next Level", "Close"};
+            return JOptionPane.showOptionDialog(gameFrame,
+                    "You complected this level!",
+                    "CONGRATULATION!",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,     //do not use a custom Icon
+                    options,  //the titles of buttons
+                    options[0]); //default button title
+        }
+
         private BufferedImage resize(BufferedImage image, int width, int height) {
             BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
-            Graphics2D g2d = (Graphics2D) bi.createGraphics();
+            Graphics2D g2d = bi.createGraphics();
             g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
             g2d.drawImage(image, 0, 0, width, height, null);
             g2d.dispose();
             return bi;
         }
 
-        public void drawSquare() {
+        void drawSquare() {
             removeAll();
             setBackground(square.getColor());
             assignPiece();

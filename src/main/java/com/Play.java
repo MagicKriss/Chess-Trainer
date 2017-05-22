@@ -1,7 +1,6 @@
 package com;
 
 import com.GUI.Table;
-import com.chessEngine.game.Game;
 
 /**
  * Created by Krisjanis on 07.05.2017.
@@ -9,7 +8,7 @@ import com.chessEngine.game.Game;
 public class Play {
 
     public static void main(String[] args) throws Exception {
-        Table table = Table.newTable();
+        Table.newTable();
     }
 
 }

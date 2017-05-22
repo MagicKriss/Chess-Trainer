@@ -1,37 +1,25 @@
-package com.chessEngine.pieces;
+package com.chessengine.pieces;
 
-import com.chessEngine.game.Square;
+import com.chessengine.game.Square;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-/**
- * Created by user on 17.26.4.
- */
 public class King extends Piece {
-    private boolean check;
 
     public King(char file, int rank, Color color) throws OccupiedSquareException {
         super(file, rank, color);
-        check = false;
     }
 
     public King(char file, int rank, Color color, boolean hasMoved) throws OccupiedSquareException {
         super(file, rank, color);
         if (hasMoved) {
             this.setHasMoved();
-        }    }
-
-    public void toggleCheck() {
-        check = !check;
+        }
     }
 
-    public boolean getCheck() {
-        return check;
-    }
+
 
    /*  private boolean checkPieceForThreat(Square square) {
         if (square.isOccupied() && square.getPiece().getColor() != this.getColor()) {
@@ -144,7 +132,7 @@ public class King extends Piece {
 
     @Override
     public Set<Square> getMoves() {
-        Set<Square> moves = new HashSet();
+        HashSet<Square> moves = new HashSet<>();
         Square checkSquare;
         // directions in witch to check for legal moves
         int rankDirection = 0;
