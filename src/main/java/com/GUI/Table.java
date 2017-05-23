@@ -67,7 +67,7 @@ public class Table {
 
         if (Game.getHeroe() != null) {
             String color = Game.getHeroe().getColor() == Color.WHITE ? "WHITE" : "BLACK";
-            sideLabel.setText("Your are playing as ");
+            sideLabel.setText("You are playing as ");
             colorLabel.setText(color);
             colorLabel.setForeground(Game.getHeroe().getColor());
             colorLabel.setFont(new Font("Verdana", Font.BOLD, 20));
@@ -135,10 +135,13 @@ public class Table {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Game.newLevel("level1");
-                    currentLevel = 1;
-                    render();
-                    hint.setEnabled(true);
+                    if(Game.newLevel("level1")) {
+                        currentLevel = 1;
+                        render();
+                        hint.setEnabled(true);
+                    }else{
+                        showMessage("Could not load level \"level1\"","No level found !");
+                    }
                 } catch (Piece.OccupiedSquareException ex) {
                     LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
@@ -148,7 +151,7 @@ public class Table {
         hint.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showMessage(Game.getHint(), "Hint");
+                showHint(Game.getHint());
             }
         });
         about.addActionListener(new ActionListener() {
@@ -237,6 +240,12 @@ public class Table {
             validate();
             repaint();
         }
+    }
+    private void showHint(String message) {
+        if(message.isEmpty()){
+            message = "Sorry, no hint was specified for this level";
+        }
+        showMessage(message,"Hint");
     }
 
     public void showMessage(String message, String title) {
@@ -392,6 +401,7 @@ public class Table {
             setBackground(square.getColor());
             assignPiece();
             validate();
+            repaint();
         }
     }
 

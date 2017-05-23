@@ -5,7 +5,6 @@ import com.chessengine.pieces.*;
 
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,7 +31,7 @@ public class Game {
     }
 
     private Game() throws Piece.OccupiedSquareException {
-        Board.BoardBuilder.emptyBoard();
+        Board.emptyBoard();
         countLevels();
     }
 
@@ -52,20 +51,29 @@ public class Game {
         }
     }
 
-    public static void newLevel(String level) throws Piece.OccupiedSquareException {
-        if (!level.equals("")) {
-            Board.BoardBuilder.buildBoardFromFen(LEVEL_PATH + level + ".fen");
-        } else {
-            Board.BoardBuilder.defaultBoard();
+    public static boolean newLevel(String level) throws Piece.OccupiedSquareException {
+        try {
+            if (level== "") {
+                Board.defaultBoard();
+                Board.setHeroe(null);
+                hint = "";
+                return true;
+            } else if (Board.buildBoardFromFen(LEVEL_PATH + level + ".fen")) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            Board.defaultBoard();
             Board.setHeroe(null);
             hint = "";
+            return false;
         }
     }
 
 
-    public static Game newGame() throws Piece.OccupiedSquareException {
+    public static void newGame() throws Piece.OccupiedSquareException {
         game = new Game();
-        return game;
     }
 
     public static List<NextMove> getLevelMoveList() {
@@ -147,7 +155,6 @@ public class Game {
             Game.computer = computer;
         }
 
-        private static class BoardBuilder {
             private static void emptyBoard() {
                 BOARD_MAP.clear();
                 for (int i = 0; i < 8; i++) {
@@ -157,7 +164,7 @@ public class Game {
                 }
             }
 
-            private static void buildBoardFromFen(String path) throws Piece.OccupiedSquareException {
+            private static boolean buildBoardFromFen(String path) throws Piece.OccupiedSquareException {
                 emptyBoard();
                 try {
                     String[] fen = FENParser.parseFenFile(path);
@@ -257,9 +264,10 @@ public class Game {
                     }
                     levelMoveList = parseMoveList(fen[1]);
                     hint = fen[2];
-
-                } catch (IOException e) {
+                    return true;
+                } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, e.toString(), e);
+                    return false;
                 }
             }
 
@@ -301,7 +309,7 @@ public class Game {
                 setPlayerToMove(whitePlayer);
             }
 
-        }
+
     }
 
     public static class NextMove {

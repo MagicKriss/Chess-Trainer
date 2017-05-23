@@ -9,26 +9,30 @@ import java.io.IOException;
  */
 public class FENParser {
 
-    public static String[] parseFenFile(String path) throws IOException {
+    public static String[] parseFenFile(String path) {
         // fen[0] = fen notation
         // fen[1] = level move list
         // fen [2] = level hint
-        String[] fen = new String[3];
-        BufferedReader br = new BufferedReader(new FileReader(path));
-        StringBuilder sb = new StringBuilder();
         try {
-            fen[0] = br.readLine();
-            fen[1] = br.readLine();
-            String line = br.readLine();
-            while (line != null) {
-                sb.append(line);
-                sb.append('\n');
-                line = br.readLine();
+            String[] fen = new String[3];
+            BufferedReader br = new BufferedReader(new FileReader(path));
+            StringBuilder sb = new StringBuilder();
+            try {
+                fen[0] = br.readLine();
+                fen[1] = br.readLine();
+                String line = br.readLine();
+                while (line != null) {
+                    sb.append(line);
+                    sb.append('\n');
+                    line = br.readLine();
+                }
+                fen[2] = sb.toString();
+            } finally {
+                br.close();
             }
-            fen[2] = sb.toString();
-        } finally {
-            br.close();
+            return fen;
+        } catch (Exception e) {
+            return null;
         }
-        return fen;
     }
 }
