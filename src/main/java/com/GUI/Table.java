@@ -4,14 +4,17 @@ import com.chessengine.game.Game;
 import com.chessengine.game.Square;
 import com.chessengine.pieces.Piece;
 
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -19,27 +22,21 @@ import java.util.logging.Logger;
 
 public class Table {
 
-    private int currentLevel;
-    private static Table table;
-    private static JFrame gameFrame;
-    private BoardPanel boardPanel;
-    private JPanel sidePanel;
     private final static String ABOUT_PATH = "resources/about.txt";
     private final static String PIECE_ICON_PATH = "resources/images/other/";
-    private static Square fromSquare;
-    private static Square toSquare;
     private final static Dimension FRAME_DIMENSIONS = new Dimension(800, 600);
     private final static Dimension BOARD_PANEL_DIMENSIONS = new Dimension(400, 350);
     private final static Dimension SIDE_PANEL_DIMENSIONS = new Dimension(200, 350);
     private static final Logger LOGGER = Logger.getLogger(Table.class.getName());
-
+    private static Table table;
+    private static JFrame gameFrame;
+    private static Square fromSquare;
+    private static Square toSquare;
+    private int currentLevel;
+    private BoardPanel boardPanel;
+    private JPanel sidePanel;
     private List<Game.NextMove> levelMoveList;
     private int iter;
-
-    public static void newTable() throws Piece.OccupiedSquareException {
-        Game.newGame();
-        table = new Table();
-    }
 
     private Table() {
         gameFrame = new JFrame("Chess");
@@ -51,10 +48,19 @@ public class Table {
         currentLevel = 0;
     }
 
-/*-----------------------------------------------------------------
-* This method is used for creating all new the components in
-* gameFrame and then redrawing them back in frame
------------------------------------------------------------------*/
+    public static void newTable() throws Piece.OccupiedSquareException {
+        Game.newGame();
+        table = new Table();
+    }
+
+    public static Table getTable() {
+        return table;
+    }
+
+    /*-----------------------------------------------------------------
+    * This method is used for creating all new the components in
+    * gameFrame and then redrawing them back in frame
+    -----------------------------------------------------------------*/
     private void render() {
         if (this.boardPanel != null) {
             gameFrame.remove(this.sidePanel);
@@ -95,10 +101,6 @@ public class Table {
             }
         });
 
-    }
-
-    public static Table getTable() {
-        return table;
     }
 
     private void makeComputersMove() {
@@ -142,12 +144,12 @@ public class Table {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if(Game.newLevel("level1")) {
+                    if (Game.newLevel("level1")) {
                         currentLevel = 1;
                         render();
                         hint.setEnabled(true);
-                    }else{
-                        showMessage("Could not load level \"level1\"","No level found !");
+                    } else {
+                        showMessage("Could not load level \"level1\"", "No level found !");
                     }
                 } catch (Piece.OccupiedSquareException ex) {
                     LOGGER.log(Level.SEVERE, ex.toString(), ex);
@@ -203,10 +205,10 @@ public class Table {
     }
 
     private void showHint(String message) {
-        if(message.isEmpty()){
+        if (message.isEmpty()) {
             message = "Sorry, no hint was specified for this level";
         }
-        showMessage(message,"Hint");
+        showMessage(message, "Hint");
     }
 
     public void showMessage(String message, String title) {

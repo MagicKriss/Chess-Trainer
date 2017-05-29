@@ -6,7 +6,7 @@ import java.awt.*;
 
 
 public class Square {
-    public static final Color DARK = new Color(181, 136, 99);
+    public static final Color DARK = new Color(179, 136, 99);
     public static final Color LIGHT = new Color(240, 217, 181);
     public static final Color HIGHLIGHT = new Color(234, 119, 119);
     public static final Color MOVED_LIGHT = new Color(248, 236, 116);
