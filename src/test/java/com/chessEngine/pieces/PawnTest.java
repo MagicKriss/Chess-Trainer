@@ -41,16 +41,16 @@ class PawnTest {
         legalMoveList.add(Square.getSquare('c', 3));
         legalMoveList.add(Square.getSquare('c', 4));
         assertEquals(legalMoveList, pawn.getMoves());
-        Game.Board.getBoardMap().get("b3").setPieceOnTile(new Pawn('b', 3, Color.BLACK));
+        Game.Board.getBoardMap().get("b3").setPieceOnSquare(new Pawn('b', 3, Color.BLACK));
         legalMoveList.add(Square.getSquare('b', 3));
         assertEquals(legalMoveList, pawn.getMoves());
-        Game.Board.getBoardMap().get("d3").setPieceOnTile(new Pawn('d', 3, Color.BLACK));
+        Game.Board.getBoardMap().get("d3").setPieceOnSquare(new Pawn('d', 3, Color.BLACK));
         legalMoveList.add(Square.getSquare('d', 3));
         assertEquals(legalMoveList, pawn.getMoves());
-        Game.Board.getBoardMap().get("c4").setPieceOnTile(new Pawn('c', 4, Color.BLACK));
+        Game.Board.getBoardMap().get("c4").setPieceOnSquare(new Pawn('c', 4, Color.BLACK));
         legalMoveList.remove(Square.getSquare('c', 4));
         assertEquals(legalMoveList, pawn.getMoves());
-        Game.Board.getBoardMap().get("c3").setPieceOnTile(new Pawn('c', 3, Color.BLACK));
+        Game.Board.getBoardMap().get("c3").setPieceOnSquare(new Pawn('c', 3, Color.BLACK));
         legalMoveList.remove(Square.getSquare('c', 3));
         assertEquals(legalMoveList, pawn.getMoves());
     }

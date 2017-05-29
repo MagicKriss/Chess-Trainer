@@ -26,31 +26,45 @@ public class Game {
 
     private static final Logger LOGGER = Logger.getLogger(Game.class.getName());
 
+    // getter method for LEVEL_COUNT
     public static int getLevelCount() {
         return LEVEL_COUNT;
     }
-
+    // class constructor
     private Game() throws Piece.OccupiedSquareException {
         Board.emptyBoard();
         countLevels();
     }
 
+    // getter method for game
     public static Game getGame() {
         return game;
     }
 
+    // getter method for hint
     public static String getHint() {
         return hint;
     }
 
+    // This method counts how many FEN files are LEVEL_PATH directory
     private static void countLevels() {
         try {
-            LEVEL_COUNT = new File(LEVEL_PATH).list().length;
+            int total = 0;
+            File folder = new File(LEVEL_PATH);
+            String[] fileNames = folder.list();
+            for(int i = 0; i < fileNames.length; i ++){
+                if(fileNames[i].endsWith(".fen")){
+                    total ++;
+                }
+            }
+            LEVEL_COUNT = total;
         } catch (NullPointerException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
 
+
+    // method for loading new level
     public static boolean newLevel(String level) throws Piece.OccupiedSquareException {
         try {
             if (level== "") {
@@ -71,7 +85,7 @@ public class Game {
         }
     }
 
-
+    // method for creating new Game instance
     public static void newGame() throws Piece.OccupiedSquareException {
         game = new Game();
     }
@@ -112,7 +126,7 @@ public class Game {
             pieceToMove = fromSquare.getPiece();
             if (pieceToMove.getColor() == player.getColor() && pieceToMove.getMoves().contains(toSquare)) {
                 if (fromSquare.equals(levelMoveList.get(iter).getFromSquare()) && toSquare.equals(levelMoveList.get(iter).getToSquare())) {
-                    toSquare.setPieceOnTile(pieceToMove);
+                    toSquare.setPieceOnSquare(pieceToMove);
                     fromSquare.removePiece();
                     fromSquare.toggleOccupied();
                     if (!pieceToMove.getHasMoved()) {
@@ -185,65 +199,65 @@ public class Game {
                             switch (boardTiles[8 * j + i]) {
                                 case 'r':
                                     if (j == 0 && (i == 0 || i == 7)) {
-                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Rook((char) (i + 97), 8 - j, Color.BLACK));
+                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Rook((char) (i + 97), 8 - j, Color.BLACK));
 
                                     } else {
-                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Rook((char) (i + 97), 8 - j, Color.BLACK, true));
+                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Rook((char) (i + 97), 8 - j, Color.BLACK, true));
                                     }
                                     break;
                                 case 'n':
-                                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Knight((char) (i + 97), 8 - j, Color.BLACK));
+                                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Knight((char) (i + 97), 8 - j, Color.BLACK));
                                     break;
                                 case 'b':
-                                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Bishop((char) (i + 97), 8 - j, Color.BLACK));
+                                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Bishop((char) (i + 97), 8 - j, Color.BLACK));
                                     break;
                                 case 'q':
-                                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Queen((char) (i + 97), 8 - j, Color.BLACK));
+                                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Queen((char) (i + 97), 8 - j, Color.BLACK));
                                     break;
                                 case 'k':
                                     if (j == 7 && (i == 4 || i == 7)) {
 
-                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new King((char) (i + 97), 8 - j, Color.BLACK));
+                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new King((char) (i + 97), 8 - j, Color.BLACK));
                                     } else {
-                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new King((char) (i + 97), 8 - j, Color.BLACK, true));
+                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new King((char) (i + 97), 8 - j, Color.BLACK, true));
                                     }
                                     break;
                                 case 'p':
                                     if (j == 1) {
-                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Pawn((char) (i + 97), 8 - j, Color.BLACK));
+                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Pawn((char) (i + 97), 8 - j, Color.BLACK));
                                     } else {
-                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Pawn((char) (i + 97), 8 - j, Color.BLACK, true));
+                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Pawn((char) (i + 97), 8 - j, Color.BLACK, true));
                                     }
                                     break;
                                 case 'R':
                                     if (j == 7 && (i == 0 || i == 7)) {
-                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Rook((char) (i + 97), 8 - j, Color.WHITE));
+                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Rook((char) (i + 97), 8 - j, Color.WHITE));
 
                                     } else {
-                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Rook((char) (i + 97), 8 - j, Color.WHITE, true));
+                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Rook((char) (i + 97), 8 - j, Color.WHITE, true));
                                     }
                                     break;
                                 case 'N':
-                                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Knight((char) (i + 97), 8 - j, Color.WHITE));
+                                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Knight((char) (i + 97), 8 - j, Color.WHITE));
                                     break;
                                 case 'B':
-                                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Bishop((char) (i + 97), 8 - j, Color.WHITE));
+                                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Bishop((char) (i + 97), 8 - j, Color.WHITE));
                                     break;
                                 case 'Q':
-                                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Queen((char) (i + 97), 8 - j, Color.WHITE));
+                                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Queen((char) (i + 97), 8 - j, Color.WHITE));
                                     break;
                                 case 'K':
                                     if (j == 7 && (i == 4 || i == 7)) {
-                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new King((char) (i + 97), 8 - j, Color.WHITE));
+                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new King((char) (i + 97), 8 - j, Color.WHITE));
                                     } else {
-                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new King((char) (i + 97), 8 - j, Color.WHITE, true));
+                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new King((char) (i + 97), 8 - j, Color.WHITE, true));
                                     }
                                     break;
                                 case 'P':
                                     if (j == 6) {
-                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Pawn((char) (i + 97), 8 - j, Color.WHITE));
+                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Pawn((char) (i + 97), 8 - j, Color.WHITE));
                                     } else {
-                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnTile(new Pawn((char) (i + 97), 8 - j, Color.WHITE, true));
+                                        BOARD_MAP.get(String.valueOf((char) (i + 97)) + (8 - j)).setPieceOnSquare(new Pawn((char) (i + 97), 8 - j, Color.WHITE, true));
                                     }
                                     break;
                                 case '-':
@@ -262,7 +276,7 @@ public class Game {
                         setHeroe(blackPlayer);
                         setComputer(whitePlayer);
                     }
-                    levelMoveList = parseMoveList(fen[1]);
+                    setLevelMoveList(parseMoveList(fen[1]));
                     hint = fen[2];
                     return true;
                 } catch (Exception e) {
@@ -284,28 +298,28 @@ public class Game {
 
             private static void defaultBoard() throws Piece.OccupiedSquareException {
                 emptyBoard();
-                BOARD_MAP.get("a1").setPieceOnTile(new Rook('a', 1, Color.WHITE));
-                BOARD_MAP.get("b1").setPieceOnTile(new Knight('b', 1, Color.WHITE));
-                BOARD_MAP.get("c1").setPieceOnTile(new Bishop('c', 1, Color.WHITE));
-                BOARD_MAP.get("d1").setPieceOnTile(new Queen('d', 1, Color.WHITE));
-                BOARD_MAP.get("e1").setPieceOnTile(new King('e', 1, Color.WHITE));
-                BOARD_MAP.get("f1").setPieceOnTile(new Bishop('f', 1, Color.WHITE));
-                BOARD_MAP.get("g1").setPieceOnTile(new Knight('g', 1, Color.WHITE));
-                BOARD_MAP.get("h1").setPieceOnTile(new Rook('h', 1, Color.WHITE));
+                BOARD_MAP.get("a1").setPieceOnSquare(new Rook('a', 1, Color.WHITE));
+                BOARD_MAP.get("b1").setPieceOnSquare(new Knight('b', 1, Color.WHITE));
+                BOARD_MAP.get("c1").setPieceOnSquare(new Bishop('c', 1, Color.WHITE));
+                BOARD_MAP.get("d1").setPieceOnSquare(new Queen('d', 1, Color.WHITE));
+                BOARD_MAP.get("e1").setPieceOnSquare(new King('e', 1, Color.WHITE));
+                BOARD_MAP.get("f1").setPieceOnSquare(new Bishop('f', 1, Color.WHITE));
+                BOARD_MAP.get("g1").setPieceOnSquare(new Knight('g', 1, Color.WHITE));
+                BOARD_MAP.get("h1").setPieceOnSquare(new Rook('h', 1, Color.WHITE));
                 for (int i = 0; i < 8; i++) {
-                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + 2).setPieceOnTile(new Pawn((char) (i + 97), 2, Color.WHITE));
+                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + 2).setPieceOnSquare(new Pawn((char) (i + 97), 2, Color.WHITE));
                 }
                 for (int i = 0; i < 8; i++) {
-                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + 7).setPieceOnTile(new Pawn((char) (i + 97), 7, Color.BLACK));
+                    BOARD_MAP.get(String.valueOf((char) (i + 97)) + 7).setPieceOnSquare(new Pawn((char) (i + 97), 7, Color.BLACK));
                 }
-                BOARD_MAP.get("a8").setPieceOnTile(new Rook('a', 8, Color.BLACK));
-                BOARD_MAP.get("b8").setPieceOnTile(new Knight('b', 8, Color.BLACK));
-                BOARD_MAP.get("c8").setPieceOnTile(new Bishop('c', 8, Color.BLACK));
-                BOARD_MAP.get("d8").setPieceOnTile(new Queen('d', 8, Color.BLACK));
-                BOARD_MAP.get("e8").setPieceOnTile(new King('e', 8, Color.BLACK));
-                BOARD_MAP.get("f8").setPieceOnTile(new Bishop('f', 8, Color.BLACK));
-                BOARD_MAP.get("g8").setPieceOnTile(new Knight('g', 8, Color.BLACK));
-                BOARD_MAP.get("h8").setPieceOnTile(new Rook('h', 8, Color.BLACK));
+                BOARD_MAP.get("a8").setPieceOnSquare(new Rook('a', 8, Color.BLACK));
+                BOARD_MAP.get("b8").setPieceOnSquare(new Knight('b', 8, Color.BLACK));
+                BOARD_MAP.get("c8").setPieceOnSquare(new Bishop('c', 8, Color.BLACK));
+                BOARD_MAP.get("d8").setPieceOnSquare(new Queen('d', 8, Color.BLACK));
+                BOARD_MAP.get("e8").setPieceOnSquare(new King('e', 8, Color.BLACK));
+                BOARD_MAP.get("f8").setPieceOnSquare(new Bishop('f', 8, Color.BLACK));
+                BOARD_MAP.get("g8").setPieceOnSquare(new Knight('g', 8, Color.BLACK));
+                BOARD_MAP.get("h8").setPieceOnSquare(new Rook('h', 8, Color.BLACK));
                 setPlayerToMove(whitePlayer);
             }
 

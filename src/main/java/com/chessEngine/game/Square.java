@@ -18,7 +18,7 @@ public class Square {
     private Piece pieceOnTile;
     private Color color;
 
-    Square(char file, int rank) {
+    public Square(char file, int rank) {
         this.file = file;
         this.rank = rank;
         occupied = false;
@@ -54,8 +54,8 @@ public class Square {
         return occupied;
     }
 
-    public void setPieceOnTile(Piece pieceOnTile) {
-        this.pieceOnTile = pieceOnTile;
+    public void setPieceOnSquare(Piece pieceOnSquare) {
+        this.pieceOnTile = pieceOnSquare;
         if (!this.isOccupied()) {
             this.toggleOccupied();
         }
@@ -70,10 +70,6 @@ public class Square {
 
     public Color getColor() {
         return color;
-    }
-
-    public String squareToString() {
-        return String.valueOf(file) + rank;
     }
 
     public static Square getSquare(char file, int rank) {

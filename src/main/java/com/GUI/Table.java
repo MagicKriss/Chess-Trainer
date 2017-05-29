@@ -51,14 +51,18 @@ public class Table {
         currentLevel = 0;
     }
 
+/*-----------------------------------------------------------------
+* This method is used for creating all new the components in
+* gameFrame and then redrawing them back in frame
+-----------------------------------------------------------------*/
     private void render() {
         if (this.boardPanel != null) {
             gameFrame.remove(this.sidePanel);
             gameFrame.remove(this.boardPanel);
         }
 
-        this.boardPanel = new BoardPanel();
-        this.sidePanel = new JPanel();
+        this.boardPanel = new BoardPanel(); // panel for displaying board
+        this.sidePanel = new JPanel(); // panel on right side for displaying information
         this.sidePanel.setBackground(new Color(206, 165, 165));
         this.sidePanel.setPreferredSize(SIDE_PANEL_DIMENSIONS);
         JLabel sideLabel = new JLabel();
@@ -105,8 +109,8 @@ public class Table {
                 LOGGER.log(Level.SEVERE, e.toString(), e);
                 Thread.currentThread().interrupt();
             }
-            Game.NextMove move = Game.getLevelMoveList().get(iter);
-            Game.move(Game.getComputer(), move.getFromSquare(), move.getToSquare(), iter);
+            Game.NextMove move = Game.getLevelMoveList().get(iter); // getting next right move
+            Game.move(Game.getComputer(), move.getFromSquare(), move.getToSquare(), iter); // making that move
             move.getFromSquare().setToMovedColor();
             move.getToSquare().setToMovedColor();
             SwingUtilities.invokeLater(new Runnable() {
@@ -121,6 +125,7 @@ public class Table {
     private JMenuBar createTableMenuBar() {
         JMenuBar tableMenuBar = new JMenuBar();
         tableMenuBar.add(createFileMenu());
+        // additional menu bar items can be added later here
         return tableMenuBar;
     }
 
@@ -131,6 +136,8 @@ public class Table {
         final JMenuItem hint = new JMenuItem("Show Hint");
         final JMenuItem about = new JMenuItem("About");
         final JMenuItem exit = new JMenuItem("Exit");
+        // setting action listeners for each button for specifying
+        // what action will be made after that button is pressed
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -168,10 +175,10 @@ public class Table {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameFrame.setVisible(false);
-                gameFrame.dispose();
+                gameFrame.dispose(); // getting rid of game frame
             }
         });
-        hint.setEnabled(false);
+        hint.setEnabled(false); // disabling hit button, before any level is loaded
         fileMenu.add(newGame);
         fileMenu.add(hint);
         fileMenu.add(about);
@@ -195,10 +202,26 @@ public class Table {
         return about;
     }
 
+    private void showHint(String message) {
+        if(message.isEmpty()){
+            message = "Sorry, no hint was specified for this level";
+        }
+        showMessage(message,"Hint");
+    }
+
+    public void showMessage(String message, String title) {
+        //custom title, no icon
+        JOptionPane.showMessageDialog(gameFrame,
+                message,
+                title,
+                JOptionPane.PLAIN_MESSAGE);
+    }
+
+
     private class BoardPanel extends JPanel {
         private List<SquarePanel> boardSquares;
 
-        BoardPanel() {
+        private BoardPanel() {
             super(new GridLayout(8, 8));
             this.boardSquares = new ArrayList<>();
             for (int i = 0; i < 8; i++) {
@@ -241,21 +264,6 @@ public class Table {
             repaint();
         }
     }
-    private void showHint(String message) {
-        if(message.isEmpty()){
-            message = "Sorry, no hint was specified for this level";
-        }
-        showMessage(message,"Hint");
-    }
-
-    public void showMessage(String message, String title) {
-        //custom title, no icon
-        JOptionPane.showMessageDialog(gameFrame,
-                message,
-                title,
-                JOptionPane.PLAIN_MESSAGE);
-    }
-
 
     private class SquarePanel extends JPanel {
         private final Square square;
@@ -396,7 +404,7 @@ public class Table {
             return bi;
         }
 
-        void drawSquare() {
+        private void drawSquare() {
             removeAll();
             setBackground(square.getColor());
             assignPiece();
