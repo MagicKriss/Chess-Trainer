@@ -276,7 +276,7 @@ public class Table {
             setPreferredSize(new Dimension(boardPanel.getWidth() / 8, boardPanel.getHeight() / 8));
             setBackground(square.getColor());
             assignPiece();
-            addMouseListener(new MouseListener() {
+            addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
                     if (fromSquare == square) {
                         fromSquare.setToNormalColor();
@@ -349,23 +349,6 @@ public class Table {
                             boardPanel.drawBoard();
                         }
                     });
-
-                }
-
-                public void mousePressed(MouseEvent e) {
-
-                }
-
-                public void mouseReleased(MouseEvent e) {
-
-                }
-
-                public void mouseEntered(MouseEvent e) {
-
-                }
-
-                public void mouseExited(MouseEvent e) {
-
                 }
             });
             validate();

@@ -64,23 +64,22 @@ public class Game {
     }
 
 
-    // method for loading new level
+    /** Loads new level. */
     public static boolean newLevel(String level) throws Piece.OccupiedSquareException {
         try {
-            if (level== "") {
+            if ("".equals(level)) {
                 Board.defaultBoard();
                 Board.setHeroe(null);
                 hint = "";
                 return true;
-            } else if (Board.buildBoardFromFen(LEVEL_PATH + level + ".fen")) {
-                return true;
             } else {
-                return false;
+		return Board.buildBoardFromFen(LEVEL_PATH + level + ".fen");
             }
         } catch (Exception e) {
             Board.defaultBoard();
             Board.setHeroe(null);
             hint = "";
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
             return false;
         }
     }
